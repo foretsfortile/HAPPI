@@ -4,231 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Console HAPPI - Vision 3 Colonnes</title>
+    <title>HAPPI Console - Dashboard</title>
+
+    <!-- Tailwind CSS pour le design moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Configuration Tailwind pour les couleurs personnalisées si besoin -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        happi: {
+                            blue: '#2563eb',
+                            dark: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Styles globaux pour la fluidité -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap');
-
         body {
-            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+            /* Empêche le scroll global, on gère les scrolls par zone */
         }
 
-        .mono {
-            font-family: 'JetBrains+Mono', monospace;
+        /* Personnalisation des barres de défilement */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
+        ::-webkit-scrollbar-track {
             background: transparent;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
 
-<body class="bg-slate-100 h-screen flex flex-col overflow-hidden">
+<body>
+    <!-- Le point d'ancrage de l'application React -->
+    <div id="root"></div>
 
-    <!-- HEADER -->
-    <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-1.5 rounded text-white shadow-sm">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <span class="font-black text-slate-800 tracking-tighter text-lg">HAPPI <span
-                    class="text-blue-600 font-normal">SYSTEM</span></span>
-        </div>
-        <div class="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Service
-                Actif</span>
-            <span class="bg-slate-100 px-2 py-1 rounded">ID: #UX-7842</span>
-        </div>
-    </header>
-
-    <!-- MAIN LAYOUT -->
-    <main class="flex-1 flex overflow-hidden">
-
-        <!-- COLONNE 1 : ÉCHANGE (FOND CLAIR) -->
-        <section class="flex-1 flex flex-col bg-white border-r border-slate-200 relative min-w-[400px]">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest">Flux Conversationnel</h2>
-                <span class="text-[10px] font-bold text-blue-600">Canal: WhatsApp Professional</span>
-            </div>
-
-            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-                <!-- Message Client -->
-                <div class="flex justify-start">
-                    <div class="max-w-[80%]">
-                        <div class="bg-slate-100 text-slate-800 p-4 rounded-2xl rounded-tl-none text-sm shadow-sm">
-                            Bonjour, je n'ai toujours pas reçu ma commande passée il y a 5 jours. C'est inadmissible !
-                        </div>
-                        <div class="mt-2 flex items-center gap-2 text-[10px] font-bold text-slate-400">
-                            <span>JEAN MARTIN</span> • <span>10:30</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Message HAPPI -->
-                <div class="flex justify-end">
-                    <div class="max-w-[80%] flex flex-col items-end">
-                        <span class="bg-blue-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded mb-1">IA
-                            HAPPI</span>
-                        <div class="bg-blue-600 text-white p-4 rounded-2xl rounded-tr-none text-sm shadow-md">
-                            Bonjour Jean. Je regrette sincèrement ce retard. Je vois que votre colis est bloqué au
-                            centre de tri de Lyon. Souhaitez-vous un remboursement des frais de port ?
-                        </div>
-                        <div class="mt-2 text-[10px] font-bold text-slate-400">10:31</div>
-                    </div>
-                </div>
-
-                <!-- Action Système -->
-                <div class="flex justify-center py-4" id="log-trigger-placeholder">
-                    <div
-                        class="bg-amber-50 text-amber-700 text-[10px] font-bold px-4 py-1.5 rounded-full border border-amber-200 uppercase tracking-tight">
-                        Alerte : Sentiment de frustration détecté par l'IA
-                    </div>
-                </div>
-            </div>
-
-            <!-- INPUT AREA -->
-            <div class="p-4 bg-white border-t border-slate-100">
-                <div class="flex gap-2">
-                    <input type="text" placeholder="Taper votre réponse..."
-                        class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
-                    <button class="bg-blue-600 text-white p-2.5 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200">
-                        <i class="fas fa-paper-plane px-1"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- COLONNE 2 : PILOTAGE & ACTIONS -->
-        <section class="w-72 bg-slate-50 border-r border-slate-200 flex flex-col p-5 shrink-0">
-            <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6"><i
-                    class="fas fa-tasks text-blue-600 mr-2"></i> Pilotage Opérationnel</h2>
-
-            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
-                <!-- Action 1 -->
-                <div
-                    class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all cursor-pointer group">
-                    <div class="flex items-center gap-2 text-blue-600 mb-2">
-                        <i class="fas fa-gift text-xs"></i>
-                        <span class="text-[11px] font-black uppercase">Geste Commercial</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 mb-3">Générer un coupon de 10% immédiatement.</p>
-                    <button
-                        class="w-full bg-blue-50 text-blue-600 py-1.5 rounded-lg text-[10px] font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">DÉCLENCHER</button>
-                </div>
-
-                <!-- Action 2 -->
-                <div
-                    class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-amber-300 transition-all cursor-pointer group">
-                    <div class="flex items-center gap-2 text-amber-600 mb-2">
-                        <i class="fas fa-user-shield text-xs"></i>
-                        <span class="text-[11px] font-black uppercase">Escalader</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 mb-3">Transférer vers un superviseur (Niveau 2).</p>
-                    <button
-                        class="w-full bg-amber-50 text-amber-600 py-1.5 rounded-lg text-[10px] font-bold group-hover:bg-amber-600 group-hover:text-white transition-colors">TRANSFÉRER</button>
-                </div>
-
-                <!-- Profil Client Rapid View -->
-                <div class="pt-6 mt-6 border-t border-slate-200">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Profil Jean Martin
-                    </h3>
-                    <div class="bg-slate-200/50 p-4 rounded-xl space-y-3">
-                        <div class="flex justify-between text-[10px]">
-                            <span class="text-slate-500">Score LTV</span>
-                            <span class="font-black">2 450 €</span>
-                        </div>
-                        <div class="flex justify-between text-[10px]">
-                            <span class="text-slate-500">Fidélité</span>
-                            <span
-                                class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase text-[8px]">Platine</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- COLONNE 3 : INTELLIGENCE & LOGS (PANNEAU TECHNIQUE SOMBRE) -->
-        <section class="w-80 bg-slate-900 flex flex-col shrink-0 overflow-hidden">
-
-            <!-- Intelligence Contextuelle -->
-            <div class="p-6 border-b border-slate-800">
-                <h2
-                    class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                    <i class="fas fa-brain text-blue-400"></i> Intelligence
-                </h2>
-
-                <div class="space-y-6">
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase">Tension Emotionnelle</span>
-                            <span class="text-[11px] font-mono text-blue-400">82%</span>
-                        </div>
-                        <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-400 w-[82%] shadow-[0_0_8px_rgba(96,165,250,0.5)]"></div>
-                        </div>
-                    </div>
-
-                    <div class="p-3 bg-slate-800/40 rounded-lg border border-slate-800">
-                        <div class="text-[9px] text-blue-400 font-black uppercase mb-1">Analyse Contextuelle</div>
-                        <p class="text-[10px] text-slate-400 leading-relaxed italic">
-                            "Client à fort potentiel. Le retard logistique actuel menace le renouvellement de
-                            l'abonnement Premium. Priorité : Action corrective immédiate."
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LOGS SYSTEME -->
-            <div class="flex-1 flex flex-col min-h-0">
-                <div class="px-6 py-4 bg-slate-950 flex justify-between items-center border-b border-slate-800">
-                    <h2
-                        class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
-                        <i class="fas fa-terminal text-xs"></i> Console Logs
-                    </h2>
-                    <span class="text-[8px] mono text-slate-700 tracking-tighter">HAPPI_OS v1.0.4</span>
-                </div>
-                <div class="flex-1 overflow-y-auto p-4 mono text-[9px] space-y-1 custom-scrollbar">
-                    <div class="flex gap-2">
-                        <span class="text-slate-700">[10:30:01]</span>
-                        <span class="text-emerald-500 font-bold uppercase">INIT:</span>
-                        <span class="text-slate-500">NlpEngine loaded</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <span class="text-slate-700">[10:30:05]</span>
-                        <span class="text-blue-500 font-bold uppercase">INFO:</span>
-                        <span class="text-slate-500">Inbound message (WhatsApp)</span>
-                    </div>
-                    <div class="flex gap-2 underline decoration-amber-900/50">
-                        <span class="text-slate-700">[10:30:12]</span>
-                        <span class="text-amber-500 font-bold uppercase">WARN:</span>
-                        <span class="text-slate-400">SentimentScore > 0.75</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <span class="text-slate-700">[10:31:00]</span>
-                        <span class="text-blue-500 font-bold uppercase">INFO:</span>
-                        <span class="text-slate-500">Querying Logistics_DB...</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <span class="text-slate-700">[10:31:04]</span>
-                        <span class="text-emerald-500 font-bold uppercase">EXEC:</span>
-                        <span class="text-slate-400 font-bold italic underline">Happi_Suggestion_PortGratuit</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
+    <!-- Note : En environnement de développement réel, c'est ici qu'on appellerait le script compilé.
+         Dans cet environnement collaboratif, le preview injecte automatiquement App.jsx dans #root. -->
 </body>
 
 </html>
