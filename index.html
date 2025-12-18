@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HAPPI V1 - Command Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="brand">
+            <div class="logo">HAPPI <span class="acronym">Hybrid Analysis & Predictive Processing Interface</span></div>
+            <div class="slogan">"... ou comment valoriser un éco-système..."</div>
+        </div>
+        <div class="nav-controls">
+            <select id="scenario-select">
+                <option value="">-- Choisir un Scénario --</option>
+            </select>
+            <button id="resetBtn" class="danger-btn">REMISE À ZÉRO</button>
+        </div>
+    </header>
+
+    <div id="command-center">
+        <section class="col action-col">
+            <h2 class="col-title" id="scenario-name">SÉLECTIONNEZ UN SCÉNARIO</h2>
+            <div class="dual-view">
+                <div class="view-box" id="box-mobile">
+                    <label>Vue Mobile</label>
+                    <div id="chat-mobile" class="scroll-area"></div>
+                </div>
+                <div class="view-box" id="box-agent">
+                    <label>Vue Conseiller</label>
+                    <div id="chat-agent" class="scroll-area"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="col brain-col">
+            <h2 class="col-title">INTELLIGENCE CONTEXTUELLE</h2>
+            <div class="insight-stack">
+                <div class="insight-box" id="box-smart">
+                    <label>Explication SMART</label>
+                    <div id="smart-content" class="scroll-area"></div>
+                </div>
+                <div class="insight-box" id="box-kpi">
+                    <label>Impact KPI</label>
+                    <div id="kpi-content" class="scroll-area"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="col system-col">
+            <h2 class="col-title">MACHINERIE</h2>
+            <div id="matrix-logs" class="matrix-area"></div>
+        </section>
+    </div>
+
+    <footer id="global-controls">
+        <div class="focus-group">
+            <button id="focusPrev" class="focus-btn">&lt;</button>
+            <div class="focus-label">FOCUS</div>
+            <button id="focusNext" class="focus-btn">&gt;</button>
+        </div>
+        <button id="nextBtn" class="main-action" disabled>ÉTAPES SUIVANTE</button>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
