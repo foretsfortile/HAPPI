@@ -2,9 +2,9 @@ let allScenarios = null;
 let currentScenarioId = null;
 let currentStepIdx = 0;
 
-// 1. Chargement des données
+// 1. CHARGEMENT
 fetch('scenarios.json')
-    .then(response => response.json())
+    .then(r => r.json())
     .then(data => {
         allScenarios = data;
         const select = document.getElementById('scenario-select');
@@ -14,14 +14,12 @@ fetch('scenarios.json')
             opt.innerText = `${id} - ${data[id].Nom_Scenario}`;
             select.appendChild(opt);
         });
-    })
-    .catch(err => console.error("Erreur JSON:", err));
+    });
 
-// 2. Sélection d'un scénario
+// 2. SELECTION SCENARIO
 document.getElementById('scenario-select').onchange = (e) => {
     const id = e.target.value;
     if (!id) return;
-
     currentScenarioId = id;
     currentStepIdx = 0;
 
@@ -33,92 +31,78 @@ document.getElementById('scenario-select').onchange = (e) => {
 
     document.getElementById('nextBtn').disabled = false;
     document.getElementById('nextBtn').innerText = "ÉTAPE SUIVANTE";
-
     renderStep();
 };
 
-// 3. Fonction d'affichage principale
+// 3. AFFICHAGE ETAPE
 function renderStep() {
-    if (!currentScenarioId) return;
     const steps = allScenarios[currentScenarioId].steps;
     const step = steps[currentStepIdx];
 
-    // --- A. MACHINERIE (LOGS) ---
+    // A. LOGS (MATRIX)
     const logArea = document.getElementById('matrix-logs');
-    const oldCursor = logArea.querySelector('.cursor');
-    if (oldCursor) oldCursor.remove();
-
+    if (logArea.querySelector('.cursor')) logArea.querySelector('.cursor').remove();
     const logLine = document.createElement('div');
-    logLine.className = "log-entry";
     logLine.innerHTML = `> ${step.Log_Systeme || "IDLE"} <span class="cursor">_</span>`;
     logArea.appendChild(logLine);
     logArea.scrollTop = logArea.scrollHeight;
 
-    // --- B. INTELLIGENCE (SMART & KPI) ---
-    // On remplace la fonction manquante par ce bloc direct
+    // B. SMART & KPI
     if (step.Explication_SMART) {
-        const div = document.createElement('div');
-        div.className = "insight-item";
-        div.style.marginBottom = "10px";
-        div.innerHTML = `<strong>Analyse :</strong> ${step.Explication_SMART}`;
-        document.getElementById('smart-content').appendChild(div);
+        const d = document.createElement('div');
+        d.className = "insight-item";
+        d.style.marginBottom = "15px";
+        d.innerHTML = `<small style="color:#3b82f6">ANALYSE :</small><br>${step.Explication_SMART}`;
+        document.getElementById('smart-content').appendChild(d);
+        document.getElementById('smart-content').scrollTop = document.getElementById('smart-content').scrollHeight;
     }
-
     if (step.Impact_KPI) {
-        const div = document.createElement('div');
-        div.className = "kpi-item";
-        div.style.marginBottom = "10px";
-        div.innerHTML = `📌 ${step.Impact_KPI}`;
-        document.getElementById('kpi-content').appendChild(div);
+        const d = document.createElement('div');
+        d.className = "kpi-item";
+        d.innerHTML = `<span style="color:#10b981">📌</span> ${step.Impact_KPI}`;
+        document.getElementById('kpi-content').appendChild(d);
     }
 
-    // --- C. INTERACTION (CHAT) ---
-    if (step.Message_UI && step.Message_UI !== "") {
+    // C. CHAT (ESCALIER ET BADGES)
+    if (step.Message_UI) {
         const chatBox = document.getElementById('chat-mobile');
-
-        // Mapping des badges
         let label = step.HAPPI;
         let cls = "badge-human";
 
-        if (step.HAPPI === "IA" || step.HAPPI === "HAPPI") {
-            label = "HAPPI";
-            cls = "badge-happi";
-        } else if (step.HAPPI === "Superviseur") {
-            cls = "badge-expert";
-        } else if (step.HAPPI === "Client") {
-            cls = "badge-client";
-        }
+        if (step.HAPPI === "IA" || step.HAPPI === "HAPPI") { label = "HAPPI"; cls = "badge-happi"; }
+        else if (step.HAPPI === "Superviseur") { cls = "badge-expert"; }
+        else if (step.HAPPI === "Client") { cls = "badge-client"; }
 
-        const msgRow = document.createElement('div');
-        msgRow.className = `message-row ${step.HAPPI}`;
-        msgRow.innerHTML = `
+        const row = document.createElement('div');
+        row.className = `message-row ${step.HAPPI}`;
+        row.innerHTML = `
             <div class="bubble">
                 <span class="msg-badge ${cls}">${label}</span>
-                <div class="msg-text">${step.Message_UI.replace(/"/g, "")}</div>
+                <div class="text">${step.Message_UI.replace(/"/g, "")}</div>
             </div>`;
-        chatBox.appendChild(msgRow);
+        chatBox.appendChild(row);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Mise à jour du texte du bouton
-    const btn = document.getElementById('nextBtn');
-    if (currentStepIdx >= steps.length - 1) {
-        btn.innerText = "FIN DU SCÉNARIO";
-    } else {
-        btn.innerText = "ÉTAPE SUIVANTE";
-    }
+    document.getElementById('nextBtn').innerText = (currentStepIdx >= steps.length - 1) ? "FIN DU SCÉNARIO" : "ÉTAPE SUIVANTE";
 }
 
-// 4. GESTION DU CLIC
-document.getElementById('nextBtn').addEventListener('click', function () {
-    if (!currentScenarioId) return;
+// 4. EVENEMENTS (BOUTON ET FOCUS)
+document.getElementById('nextBtn').onclick = () => {
     const steps = allScenarios[currentScenarioId].steps;
-
     if (currentStepIdx < steps.length - 1) {
         currentStepIdx++;
         renderStep();
     }
-});
+};
 
-// 5. REPRISE
+const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
+let focusIdx = 0;
+function applyFocus() {
+    sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused'));
+}
+document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % 3; applyFocus(); };
+document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx + 2) % 3; applyFocus(); };
+
 document.getElementById('resetBtn').onclick = () => location.reload();
+applyFocus(); // Initialisation

@@ -1,13 +1,13 @@
-/* RESET DE BASE POUR FORCER LE DARK MODE */
+/* RESET & BASE */
 * {
     margin: 0;
     padding: 0;
-    box-box: border-box;
+    box-sizing: border-box;
 }
 
 body {
-    background-color: #0a0f18 !important;
-    color: #e2e8f0 !important;
+    background-color: #0a0f18;
+    color: #e2e8f0;
     font-family: 'Inter', sans-serif;
     height: 100vh;
     display: flex;
@@ -26,9 +26,9 @@ body {
 }
 
 .logo {
-    font-weight: bold;
+    font-weight: 900;
     color: #3b82f6;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .acronym {
@@ -42,24 +42,34 @@ body {
     font-style: italic;
     color: #475569;
     font-size: 12px;
+    display: block;
 }
 
-/* GRID PRINCIPAL */
+/* COMMAND CENTER GRID */
 #command-center {
     display: grid;
     grid-template-columns: 1.2fr 1fr 320px;
     flex: 1;
     overflow: hidden;
     background: #0a0f18;
+    gap: 0;
 }
 
-/* COLONNES */
+/* COLONNES & FOCUS */
 .col {
     display: flex;
     flex-direction: column;
     padding: 15px;
     border-right: 1px solid #1e293b;
     height: 100%;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.col.focused {
+    background: rgba(59, 130, 246, 0.03);
+    box-shadow: inset 0 0 50px rgba(59, 130, 246, 0.1);
+    border: 1px solid #3b82f6 !important;
+    z-index: 10;
 }
 
 .col-title {
@@ -72,7 +82,7 @@ body {
     padding-bottom: 5px;
 }
 
-/* BOXES ET CONTENU */
+/* BOXES */
 .view-box,
 .insight-box,
 .matrix-box {
@@ -80,7 +90,6 @@ body {
     background: #161e2d;
     border: 1px solid #1e293b;
     border-radius: 4px;
-    position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -93,55 +102,120 @@ body {
     padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .matrix-area {
     flex: 1;
     background: #000;
     color: #00ff41;
-    font-family: monospace;
+    font-family: 'Fira Code', monospace;
     font-size: 11px;
     padding: 10px;
     overflow-y: auto;
 }
 
-/* BADGES ET MESSAGES */
+/* CHAT & ESCALIER */
+.message-row {
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/* Client à droite (Bleu HAPPI) */
+.message-row.Client {
+    justify-content: flex-end;
+    padding-left: 15%;
+}
+
+.message-row.Client .bubble {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 15px 15px 2px 15px;
+}
+
+/* Intervenants à gauche */
+.message-row.HAPPI,
+.message-row.IA,
+.message-row.Conseiller,
+.message-row.Superviseur {
+    justify-content: flex-start;
+    padding-right: 15%;
+}
+
+.message-row.HAPPI .bubble,
+.message-row.IA .bubble,
+.message-row.Conseiller .bubble,
+.message-row.Superviseur .bubble {
+    background-color: #1e293b;
+    border-radius: 15px 15px 15px 2px;
+    border-left: 3px solid #3b82f6;
+}
+
+.bubble {
+    padding: 12px 16px;
+    max-width: 90%;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* BADGES & HYPER-PULSE */
 .msg-badge {
     display: inline-block;
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 10px;
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-weight: 900;
+    margin-bottom: 8px;
     text-transform: uppercase;
 }
 
 .badge-happi {
     background: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-    animation: pulse 2s infinite;
+    color: white;
+    animation: hyper-pulse 1.5s infinite;
 }
 
 .badge-human {
     background: #475569;
+    color: white;
 }
 
 .badge-expert {
     background: #8b5cf6;
+    color: white;
 }
 
-.bubble {
-    background: #1e293b;
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    max-width: 90%;
+.badge-client {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
-/* FOOTER */
+@keyframes hyper-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #3b82f6;
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #3b82f6;
+        filter: brightness(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #3b82f6;
+        filter: brightness(1);
+    }
+}
+
+/* FOOTER & CONTROLES */
 #global-controls {
-    height: 80px;
+    height: 70px;
     background: #000;
     display: flex;
     justify-content: space-between;
@@ -150,34 +224,33 @@ body {
     border-top: 1px solid #1e293b;
 }
 
+.focus-btn {
+    background: #1e293b;
+    color: white;
+    border: 1px solid #3b82f6;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
 .main-action {
     background: #10b981;
     color: white;
     border: none;
-    padding: 12px 30px;
+    padding: 10px 25px;
     border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
 }
 
-/* ANIMATIONS */
-@keyframes pulse {
-    0% {
-        opacity: 0.8;
-    }
-
-    50% {
-        opacity: 1;
-        box-shadow: 0 0 15px #3b82f6;
-    }
-
-    100% {
-        opacity: 0.8;
-    }
+.main-action:disabled {
+    background: #334155;
+    cursor: not-allowed;
 }
 
 .cursor {
     animation: blink 1s step-end infinite;
+    font-weight: bold;
 }
 
 @keyframes blink {
