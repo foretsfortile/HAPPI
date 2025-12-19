@@ -223,3 +223,58 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
+/* INTELLIGENCE CONTEXTUELLE - Séparation stricte */
+.brain-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insight-box {
+    flex: 2;
+    /* Prend plus de place pour SMART */
+    background: #161e2d;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.kpi-box {
+    flex: 1;
+    /* Moins de place pour KPI */
+    background: #161e2d;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* TAILLE DES CARACTERES FIXE */
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    padding-bottom: 25px;
+    /* Evite que le bas soit coupé */
+}
+
+/* On force la petite taille ici pour éviter les surprises */
+.insight-item,
+.kpi-item,
+.timestamp {
+    font-size: 11px !important;
+    line-height: 1.4;
+}
+
+.inner-label {
+    font-size: 10px;
+    color: #64748b;
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    display: none;
+}

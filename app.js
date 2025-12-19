@@ -114,4 +114,47 @@ document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1)
 document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx + 2) % 3; applyFocus(); };
 
 document.getElementById('resetBtn').onclick = () => location.reload();
-applyFocus();
+applyFocus(); function renderStep() {
+    const steps = allScenarios[currentScenarioId].steps;
+    const step = steps[currentStepIdx];
+
+    // LOGS SYSTEME
+    const logArea = document.getElementById('matrix-logs');
+    const logLine = document.createElement('div');
+    logLine.innerHTML = `<span class="timestamp">${getTechTime()}</span><span style="color:#00ff41">></span> ${step.Log_Systeme || "IDLE"}`;
+    logArea.prepend(logLine);
+
+    // EXPLICATION SMART (Uniquement si le texte existe)
+    if (step.Explication_SMART && step.Explication_SMART.trim() !== "") {
+        const d = document.createElement('div');
+        d.className = "insight-item";
+        d.innerHTML = `<span class="timestamp">${getTechTime()}</span> <b style="color:#3b82f6">INTEL:</b> ${step.Explication_SMART}`;
+        document.getElementById('smart-content').prepend(d);
+    }
+
+    // IMPACT KPI (Uniquement si le texte existe)
+    if (step.Impact_KPI && step.Impact_KPI.trim() !== "") {
+        const d = document.createElement('div');
+        d.className = "kpi-item";
+        d.innerHTML = `<span style="color:#10b981">⚡ KPI:</span> ${step.Impact_KPI}`;
+        document.getElementById('kpi-content').prepend(d);
+    }
+
+    // CHAT (Interaction)
+    if (step.Message_UI) {
+        const chatBox = document.getElementById('chat-mobile');
+        const row = document.createElement('div');
+        row.className = `message-row ${step.HAPPI}`;
+        // Utilisation des guillemets typographiques pour les messages
+        const cleanMsg = step.Message_UI.replace(/"/g, "").replace(/'/g, "’");
+        row.innerHTML = `
+            <div class="bubble">
+                <span class="msg-badge ${(step.HAPPI === 'Client') ? 'badge-client' : 'badge-happi'}">${step.HAPPI}</span>
+                <div>« ${cleanMsg} »</div>
+            </div>`;
+        chatBox.appendChild(row);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    document.getElementById('nextBtn').innerText = (currentStepIdx >= steps.length - 1) ? "FIN DU SCÉNARIO" : "ÉTAPE SUIVANTE";
+}
