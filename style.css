@@ -31,19 +31,6 @@ body {
     font-size: 22px;
 }
 
-.acronym {
-    font-size: 11px;
-    color: #64748b;
-    font-weight: normal;
-    margin-left: 10px;
-}
-
-.slogan {
-    font-style: italic;
-    color: #475569;
-    font-size: 12px;
-}
-
 /* GRID */
 #command-center {
     display: grid;
@@ -79,6 +66,18 @@ body {
 }
 
 /* BOXES */
+.view-box,
+.matrix-box {
+    flex: 1;
+    background: #161e2d;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
 .insight-box {
     flex: 0.7;
     display: flex;
@@ -94,21 +93,8 @@ body {
     overflow: hidden;
 }
 
-.view-box,
-.matrix-box {
-    flex: 1;
-    background: #161e2d;
-    border: 1px solid #1e293b;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-
-/* TITRES INTERNES (Initialement cachés) */
-.inner-label,
-#interaction-label {
+/* TITRES INTERNES (Masqués par défaut) */
+.inner-label {
     font-size: 10px;
     color: #64748b;
     padding: 5px 10px;
@@ -125,7 +111,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    scroll-behavior: smooth;
 }
 
 .matrix-area {
@@ -138,13 +123,12 @@ body {
     overflow-y: auto;
 }
 
-/* TIMESTAMPS & NEON LOGS */
+/* LOGS & TIMESTAMPS */
 .timestamp {
     color: #008f11;
     opacity: 0.7;
     font-size: 9px;
     margin-right: 8px;
-    font-family: 'Fira Code', monospace;
 }
 
 .scenario-separator {
@@ -157,7 +141,7 @@ body {
     text-shadow: 0 0 5px #3b82f6;
 }
 
-/* CHAT ESCALIER */
+/* MESSAGES */
 .message-row {
     display: flex;
     width: 100%;
@@ -173,7 +157,6 @@ body {
     background-color: #3b82f6;
     color: white;
     border-radius: 12px 12px 2px 12px;
-    border: none;
 }
 
 .message-row:not(.Client) {
@@ -183,18 +166,16 @@ body {
 
 .message-row:not(.Client) .bubble {
     background-color: #1e293b;
-    border-radius: 12px 12px 12px 2px;
     border-left: 3px solid #3b82f6;
+    border-radius: 12px 12px 12px 2px;
 }
 
 .bubble {
     padding: 10px 14px;
     max-width: 95%;
     font-size: 13px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* BADGES & PULSE */
 .msg-badge {
     display: inline-block;
     padding: 2px 6px;
@@ -211,39 +192,20 @@ body {
     animation: hyper-pulse 1.5s infinite;
 }
 
-.badge-human {
-    background: #475569;
-}
-
-.badge-expert {
-    background: #8b5cf6;
-}
-
 .badge-client {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.insight-item,
-.kpi-item {
-    font-size: 11px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 5px;
-}
-
 @keyframes hyper-pulse {
     0% {
-        transform: scale(1);
         box-shadow: 0 0 5px #3b82f6;
     }
 
     50% {
-        transform: scale(1.05);
         box-shadow: 0 0 15px #3b82f6;
     }
 
     100% {
-        transform: scale(1);
         box-shadow: 0 0 5px #3b82f6;
     }
 }
@@ -267,20 +229,4 @@ body {
     border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
-}
-
-.cursor {
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-
-    from,
-    to {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
 }
