@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAPPI V1 - Command Center</title>
     <link rel="stylesheet" href="style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
@@ -21,17 +18,16 @@
             <select id="scenario-select">
                 <option value="">-- Choisir un Scénario --</option>
             </select>
-            <button id="resetBtn" class="danger-btn">REPRISE</button>
+            <button id="resetBtn">REPRISE</button>
         </div>
     </header>
 
     <main id="command-center">
-        <section class="col action-col" id="box-action">
+        <section class="col action-col">
             <h2 class="col-title" id="scenario-name">SÉLECTIONNEZ UN SCÉNARIO</h2>
-            <div class="view-box">
-                <label>Flux Interaction</label>
-                <div id="chat-mobile" class="scroll-area">
-                </div>
+            <div class="view-box" id="box-action">
+                <label>Interaction</label>
+                <div id="chat-mobile" class="scroll-area"></div>
             </div>
         </section>
 
@@ -49,9 +45,10 @@
             </div>
         </section>
 
-        <section class="col system-col" id="box-system">
+        <section class="col system-col">
             <h2 class="col-title">MACHINERIE</h2>
-            <div id="matrix-logs" class="matrix-area">
+            <div class="matrix-box" id="box-system">
+                <div id="matrix-logs" class="matrix-area"></div>
             </div>
         </section>
     </main>
@@ -62,8 +59,7 @@
             <span class="focus-label">FOCUS</span>
             <button id="focusNext" class="focus-btn">&gt;</button>
         </div>
-
-        <button id="nextBtn" class="main-action" disabled>ÉTAPES SUIVANTE</button>
+        <button id="nextBtn" class="main-action" disabled>ÉTAPE SUIVANTE</button>
     </footer>
 
     <script src="app.js"></script>
