@@ -7,7 +7,7 @@ function getTechTime() {
     return `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
 }
 
-// 1. CHARGEMENT (Strictement identique au vôtre)
+// 1. CHARGEMENT
 fetch('scenarios.json').then(r => r.json()).then(data => {
     allScenarios = data;
     const select = document.getElementById('scenario-select');
@@ -19,7 +19,7 @@ fetch('scenarios.json').then(r => r.json()).then(data => {
     });
 });
 
-// 2. CHANGEMENT DE SCENARIO (Nettoyage pour la transition)
+// 2. CHANGEMENT DE SCENARIO
 document.getElementById('scenario-select').onchange = (e) => {
     const id = e.target.value;
     if (!id) return;
@@ -28,87 +28,88 @@ document.getElementById('scenario-select').onchange = (e) => {
 
     document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
 
-    // On vide tout pour assurer la transition propre demandée
+    // CONTINUITÉ : On ne vide QUE le chat. 
+    // On laisse les logs et intel pour l'effet "historique système".
     document.getElementById('chat-mobile').innerHTML = "";
-    document.getElementById('smart-content').innerHTML = "";
-    document.getElementById('matrix-logs').innerHTML = "";
-    document.getElementById('kpi-content').innerHTML = "";
+
+    // On ajoute juste un marqueur visuel dans les logs sans effacer
+    const sep = `<div class="scenario-separator" style="color:#3b82f6; border-bottom:1px dashed #3b82f6; margin:10px 0;">>>> NOUVEAU CONTEXTE : ${id}</div>`;
+    document.getElementById('matrix-logs').insertAdjacentHTML('afterbegin', sep);
 
     renderStep();
 };
 
-// 3. RENDU (Réutilisation de VOS méthodes d'insertion)
+// 3. RENDU DES ÉTAPES
 function renderStep() {
     const scenario = allScenarios[currentScenarioId];
     const step = scenario.steps[currentStepIdx];
     const isLastStep = (currentStepIdx >= scenario.steps.length - 1);
 
-    // --- LOGS (Insertion par le HAUT - Votre Matrix) ---
+    // --- LOGS (Restauration Matrix + Remplissage par le HAUT) ---
     const logBox = document.getElementById('matrix-logs');
-    const logEntry = `<div class="log-line"><span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme}</div>`;
-    // 'afterbegin' = Remplissage par le haut (méthode de votre fichier original)
-    logBox.insertAdjacentHTML('afterbegin', logEntry);
+    // 'afterbegin' assure que le nouveau log est en haut, activant le curseur Matrix du CSS
+    logBox.insertAdjacentHTML('afterbegin', `<div class="log-line"><span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme}</div>`);
 
-    // --- SMART & KPI (Insertion par le HAUT) ---
+    // --- SMART & KPI (Restauration Taille & Remplissage Haut) ---
     const smartBox = document.getElementById('smart-content');
     const kpiBox = document.getElementById('kpi-content');
 
-    if (isLastStep && scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
-        smartBox.insertAdjacentHTML('afterbegin', `<div class="debrief-final">${scenario.Script_Debrief_IA}</div>`);
-    } else {
-        smartBox.insertAdjacentHTML('afterbegin', `<div class="smart-entry">${step.Explication_SMART}</div>`);
-    }
-    kpiBox.innerHTML = step.Impact_KPI;
+    // Style inline pour garantir la petite taille demandée (si non géré par CSS)
+    const smallTextStyle = "font-size: 0.85rem; line-height: 1.2; margin-bottom: 8px; color: #cbd5e1;";
 
-    // --- CHAT & EMAIL CARD (Insertion par le BAS) ---
+    if (isLastStep && scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
+        smartBox.insertAdjacentHTML('afterbegin', `<div class="debrief-final" style="${smallTextStyle} color:#3b82f6; font-style:italic; border:1px solid #3b82f6; padding:5px;">${scenario.Script_Debrief_IA}</div>`);
+    } else {
+        smartBox.insertAdjacentHTML('afterbegin', `<div class="smart-entry" style="${smallTextStyle}">${step.Explication_SMART}</div>`);
+    }
+
+    // KPI : On remplace la valeur pour plus de lisibilité, mais en petit
+    kpiBox.innerHTML = `<div style="font-size: 0.9rem; font-weight: bold; color: #10b981;">${step.Impact_KPI}</div>`;
+
+    // --- CHAT & EMAIL CARD ---
     const chatBox = document.getElementById('chat-mobile');
 
     if (isLastStep && scenario.Is_Email_Card) {
-        const emailHtml = `
-            <div class="email-card">
-                <div class="email-header">HAPPI : CLÔTURE</div>
-                <div class="email-body">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
-                <button class="feedback-btn">AVIS</button>
-            </div>`;
-        chatBox.insertAdjacentHTML('beforeend', emailHtml);
+        chatBox.insertAdjacentHTML('beforeend', `
+            <div class="email-card" style="background:rgba(30,41,59,0.8); border:1px solid #10b981; padding:15px; margin:10px 0; border-radius:8px;">
+                <div style="color:#10b981; font-weight:bold; font-size:10px; margin-bottom:5px;">HAPPI : CLÔTURE</div>
+                <div style="font-size:12px;">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
+                <button style="width:100%; margin-top:10px; background:#10b981; border:none; color:white; padding:5px; cursor:pointer;">AVIS</button>
+            </div>`);
     } else {
         const acteur = step.Acteur;
         const side = (acteur === "Client") ? "Client" : "Happi";
-        const html = `
+        chatBox.insertAdjacentHTML('beforeend', `
             <div class="message-row ${side}">
                 <div class="bubble">
                     <span class="msg-badge ${acteur.toLowerCase()}">${acteur.toUpperCase()}</span>
                     <div>${step.Message_UI.replace(/\"/g, "")}</div>
                 </div>
-            </div>`;
-        chatBox.insertAdjacentHTML('beforeend', html);
+            </div>`);
     }
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // --- LOGIQUE BOUTON (L'indicateur CONTINUER) ---
+    // --- NAVIGATION ---
     const btn = document.getElementById('nextBtn');
-
     if (isLastStep && scenario.Scenario_Suivant) {
-        btn.innerText = "CONTINUER"; // Signal visuel pour le présentateur
+        btn.innerText = "CONTINUER"; // Signal pour le présentateur
         btn.onclick = () => {
             const nextId = scenario.Scenario_Suivant.split(':')[0];
-            const select = document.getElementById('scenario-select');
-            select.value = nextId;
-            select.dispatchEvent(new Event('change')); // Déclenche le nettoyage du panneau
+            document.getElementById('scenario-select').value = nextId;
+            document.getElementById('scenario-select').dispatchEvent(new Event('change'));
         };
-    } else if (isLastStep) {
-        btn.innerText = "FIN";
-        btn.onclick = null;
     } else {
-        btn.innerText = "SUIVANT";
+        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
         btn.onclick = () => {
-            currentStepIdx++;
-            renderStep();
+            if (currentStepIdx < scenario.steps.length - 1) {
+                currentStepIdx++;
+                renderStep();
+            }
         };
     }
 }
 
-// 4. FOCUS (Strictement repris de votre fichier original)
+// 4. NAVIGATION FOCUS (Inchangée)
 const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
 let focusIdx = 0;
 function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
