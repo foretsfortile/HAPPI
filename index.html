@@ -56,12 +56,21 @@
     </main>
 
     <footer id="global-controls">
-        <div class="focus-group">
-            <button id="focusPrev" class="focus-btn">&lt;</button>
-            <span class="focus-label">FOCUS</span>
-            <button id="focusNext" class="focus-btn">&gt;</button>
+        <div class="controls-left">
+            <select id="scenario-select">
+                <option value="">-- CHOISIR UN SCÉNARIO --</option>
+            </select>
+            <button id="resetBtn" style="margin-left: 10px;">REPRISE</button>
         </div>
-        <button id="nextBtn" class="main-action" disabled>ÉTAPE SUIVANTE</button>
+
+        <div class="controls-right">
+            <div class="focus-group">
+                <button id="focusPrev" class="focus-btn">&lt;</button>
+                <span class="focus-label">Focus</span>
+                <button id="focusNext" class="focus-btn">&gt;</button>
+            </div>
+            <button id="nextBtn" class="main-action">SUIVANT</button>
+        </div>
     </footer>
 
     <script src="app.js"></script>

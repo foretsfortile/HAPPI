@@ -1,4 +1,4 @@
-/* RESET COMPLET */
+/* --- BASE & LAYOUT --- */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +15,7 @@ body {
     overflow: hidden;
 }
 
-/* HEADER FIXE */
+/* --- HEADER --- */
 #main-header {
     height: 60px;
     display: flex;
@@ -39,7 +39,7 @@ body {
     font-size: 12px;
 }
 
-/* GRID PRINCIPALE */
+/* --- GRID --- */
 #command-center {
     display: grid;
     grid-template-columns: 1.2fr 1.1fr 340px;
@@ -56,7 +56,12 @@ body {
     overflow: hidden;
 }
 
-/* TITRES */
+.col.focused {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid #3b82f6 !important;
+    z-index: 10;
+}
+
 .col-title {
     font-size: 10px;
     letter-spacing: 2px;
@@ -68,7 +73,7 @@ body {
     flex-shrink: 0;
 }
 
-/* COLONNE CENTRALE : VERROUILLAGE ANTI-ECRASEMENT */
+/* --- COLONNE CENTRALE (SMART & KPI) --- */
 .intel-container {
     display: flex;
     flex-direction: column;
@@ -77,7 +82,6 @@ body {
     gap: 20px;
 }
 
-/* Ici on force les hauteurs : SMART ne pourra jamais écraser KPI */
 #box-smart {
     height: 60% !important;
     flex-shrink: 0;
@@ -99,7 +103,7 @@ body {
     overflow: hidden;
 }
 
-/* ZONES DE CONTENU */
+/* --- SCROLL AREAS --- */
 .inner-label {
     font-size: 10px;
     color: #64748b;
@@ -107,7 +111,6 @@ body {
     background: rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
     display: none;
-    flex-shrink: 0;
 }
 
 .scroll-area {
@@ -128,7 +131,67 @@ body {
     overflow-y: auto;
 }
 
-/* CURSEUR & TEXTES */
+/* --- CHAT & BADGES COULEURS --- */
+.message-row {
+    display: flex;
+    width: 100%;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.message-row.Client {
+    justify-content: flex-end;
+}
+
+.bubble {
+    padding: 10px;
+    max-width: 85%;
+    font-size: 13px;
+    border-radius: 12px;
+}
+
+.message-row.Client .bubble {
+    background-color: #3b82f6;
+    border-bottom-right-radius: 2px;
+}
+
+.message-row.Happi .bubble {
+    background-color: #1e293b;
+    border-left: 3px solid #3b82f6;
+    border-bottom-left-radius: 2px;
+}
+
+.msg-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 900;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    color: white;
+}
+
+.msg-badge.happi {
+    background-color: #10b981;
+}
+
+/* Vert */
+.msg-badge.conseiller {
+    background-color: #f59e0b;
+}
+
+/* Orange */
+.msg-badge.superviseur {
+    background-color: #ef4444;
+}
+
+/* Rouge */
+.msg-badge.client {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- ÉLÉMENTS TECHNIQUES --- */
 .cursor {
     display: inline-block;
     color: #00ff41;
@@ -154,7 +217,6 @@ body {
     margin-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding-bottom: 5px;
-    flex-shrink: 0;
 }
 
 .timestamp {
@@ -171,48 +233,9 @@ body {
     color: #3b82f6;
     font-size: 9px;
     text-align: center;
-    flex-shrink: 0;
 }
 
-/* CHAT MESSAGES */
-.message-row {
-    display: flex;
-    width: 100%;
-    margin-bottom: 12px;
-    flex-shrink: 0;
-}
-
-.message-row.Client {
-    justify-content: flex-end;
-}
-
-.message-row.Client .bubble {
-    background-color: #3b82f6;
-    border-radius: 12px 12px 2px 12px;
-}
-
-.message-row.Happi .bubble {
-    background-color: #1e293b;
-    border-left: 3px solid #3b82f6;
-    border-radius: 12px 12px 12px 2px;
-}
-
-.bubble {
-    padding: 10px;
-    max-width: 85%;
-    font-size: 13px;
-}
-
-.msg-badge {
-    display: block;
-    font-size: 8px;
-    font-weight: 900;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    opacity: 0.7;
-}
-
-/* FOOTER FIXE */
+/* --- FOOTER & CONTROLS --- */
 #global-controls {
     height: 60px;
     background: #000;
@@ -224,11 +247,61 @@ body {
     flex-shrink: 0;
 }
 
+/* Adoucissement des menus blancs */
+#scenario-select,
+#resetBtn {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Bloc Focus unifié */
+.focus-group {
+    display: flex;
+    align-items: center;
+    background: #1e293b;
+    border: 1px solid #3b82f6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.focus-btn {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.focus-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.focus-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    padding: 0 10px;
+    border-left: 1px solid #334155;
+    border-right: 1px solid #334155;
+}
+
 .main-action {
     background: #10b981;
     color: white;
     border: none;
-    padding: 8px 20px;
+    padding: 10px 25px;
     border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
