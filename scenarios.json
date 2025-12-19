@@ -13,7 +13,7 @@
             {
                 "ID_Etape": "001.001",
                 "Scenario_ID": "001",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -27,7 +27,7 @@
             {
                 "ID_Etape": "001.002",
                 "Scenario_ID": "001",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "Conseil IA",
@@ -41,7 +41,7 @@
             {
                 "ID_Etape": "001.003",
                 "Scenario_ID": "001",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "Conseil IA",
@@ -55,7 +55,7 @@
             {
                 "ID_Etape": "001.004",
                 "Scenario_ID": "001",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -69,7 +69,7 @@
             {
                 "ID_Etape": "001.005",
                 "Scenario_ID": "001",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_DEBRIEF",
                 "Label_IA": "",
@@ -96,7 +96,7 @@
             {
                 "ID_Etape": "002.001",
                 "Scenario_ID": "002",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_RT",
                 "Template_ID": "T_SUPERVISEUR_RT",
                 "Label_IA": "",
@@ -110,7 +110,7 @@
             {
                 "ID_Etape": "002.002",
                 "Scenario_ID": "002",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_RT",
                 "Template_ID": "T_SUPERVISEUR_RT",
                 "Label_IA": "",
@@ -124,7 +124,7 @@
             {
                 "ID_Etape": "002.003",
                 "Scenario_ID": "002",
-                "HAPPI": "Conseiller",
+                "Acteur": "Conseiller",
                 "Type_Vue": "Agent",
                 "Template_ID": "T_AGENT",
                 "Label_IA": "Conseil IA",
@@ -138,7 +138,7 @@
             {
                 "ID_Etape": "002.004",
                 "Scenario_ID": "002",
-                "HAPPI": "Conseiller",
+                "Acteur": "Conseiller",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_AGENT",
                 "Label_IA": "",
@@ -165,7 +165,7 @@
             {
                 "ID_Etape": "003.001",
                 "Scenario_ID": "003",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "Conseil IA",
@@ -179,7 +179,7 @@
             {
                 "ID_Etape": "003.002",
                 "Scenario_ID": "003",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "Conseil IA",
@@ -193,7 +193,7 @@
             {
                 "ID_Etape": "003.003",
                 "Scenario_ID": "003",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -220,7 +220,7 @@
             {
                 "ID_Etape": "005.001",
                 "Scenario_ID": "005",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -234,7 +234,7 @@
             {
                 "ID_Etape": "005.002",
                 "Scenario_ID": "005",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "Conseil IA",
@@ -248,7 +248,7 @@
             {
                 "ID_Etape": "005.003",
                 "Scenario_ID": "005",
-                "HAPPI": "Conseiller",
+                "Acteur": "Conseiller",
                 "Type_Vue": "Mobile | Agent",
                 "Template_ID": "T_AGENT",
                 "Label_IA": "",
@@ -262,7 +262,7 @@
             {
                 "ID_Etape": "005.004",
                 "Scenario_ID": "005",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_RT",
                 "Template_ID": "T_SUPERVISEUR_RT",
                 "Label_IA": "",
@@ -276,7 +276,7 @@
             {
                 "ID_Etape": "005.005",
                 "Scenario_ID": "005",
-                "HAPPI": "Conseiller",
+                "Acteur": "Conseiller",
                 "Type_Vue": "Agent",
                 "Template_ID": "T_AGENT",
                 "Label_IA": "",
@@ -290,7 +290,7 @@
             {
                 "ID_Etape": "005.006",
                 "Scenario_ID": "005",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -304,7 +304,7 @@
             {
                 "ID_Etape": "005.007",
                 "Scenario_ID": "005",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_RT",
                 "Template_ID": "T_SUP_RT",
                 "Label_IA": "",
@@ -318,7 +318,7 @@
             {
                 "ID_Etape": "005.008",
                 "Scenario_ID": "005",
-                "HAPPI": "Client",
+                "Acteur": "Client",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_MOBILE",
                 "Label_IA": "",
@@ -332,7 +332,7 @@
             {
                 "ID_Etape": "005.009",
                 "Scenario_ID": "005",
-                "HAPPI": "HAPPI",
+                "Acteur": "HAPPI",
                 "Type_Vue": "Mobile",
                 "Template_ID": "T_DEBRIEF",
                 "Label_IA": "",
@@ -359,7 +359,7 @@
             {
                 "ID_Etape": "006.001",
                 "Scenario_ID": "006",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_SU",
                 "Template_ID": "T_SUPERVISEUR_SU",
                 "Label_IA": "",
@@ -373,7 +373,7 @@
             {
                 "ID_Etape": "006.002",
                 "Scenario_ID": "006",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_SU",
                 "Template_ID": "T_SUPERVISEUR_SU",
                 "Label_IA": "",
@@ -387,7 +387,7 @@
             {
                 "ID_Etape": "006.003",
                 "Scenario_ID": "006",
-                "HAPPI": "Superviseur",
+                "Acteur": "Superviseur",
                 "Type_Vue": "Superviseur_SU",
                 "Template_ID": "T_SUPERVISEUR_SU",
                 "Label_IA": "",
