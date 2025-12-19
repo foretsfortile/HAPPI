@@ -7,7 +7,7 @@ function getTechTime() {
     return `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
 }
 
-// 1. CHARGEMENT
+// 1. CHARGEMENT (Strictement identique au vôtre)
 fetch('scenarios.json').then(r => r.json()).then(data => {
     allScenarios = data;
     const select = document.getElementById('scenario-select');
@@ -19,15 +19,16 @@ fetch('scenarios.json').then(r => r.json()).then(data => {
     });
 });
 
-// 2. CHANGEMENT DE SCENARIO (Nettoyage Complet ici pour la transition)
+// 2. CHANGEMENT DE SCENARIO (Nettoyage pour la transition)
 document.getElementById('scenario-select').onchange = (e) => {
     const id = e.target.value;
     if (!id) return;
     currentScenarioId = id;
     currentStepIdx = 0;
 
-    // On réinitialise tout proprement pour marquer la nouvelle étape
     document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
+
+    // On vide tout pour assurer la transition propre demandée
     document.getElementById('chat-mobile').innerHTML = "";
     document.getElementById('smart-content').innerHTML = "";
     document.getElementById('matrix-logs').innerHTML = "";
@@ -36,18 +37,19 @@ document.getElementById('scenario-select').onchange = (e) => {
     renderStep();
 };
 
-// 3. RENDU
+// 3. RENDU (Réutilisation de VOS méthodes d'insertion)
 function renderStep() {
     const scenario = allScenarios[currentScenarioId];
     const step = scenario.steps[currentStepIdx];
     const isLastStep = (currentStepIdx >= scenario.steps.length - 1);
 
-    // --- LOGS (RESTAURATION MATRIX : Remplissage par le HAUT avec prepend) ---
+    // --- LOGS (Insertion par le HAUT - Votre Matrix) ---
     const logBox = document.getElementById('matrix-logs');
     const logEntry = `<div class="log-line"><span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme}</div>`;
-    logBox.insertAdjacentHTML('afterbegin', logEntry); // afterbegin = remplissage par le haut
+    // 'afterbegin' = Remplissage par le haut (méthode de votre fichier original)
+    logBox.insertAdjacentHTML('afterbegin', logEntry);
 
-    // --- SMART & KPI (Remplissage par le HAUT) ---
+    // --- SMART & KPI (Insertion par le HAUT) ---
     const smartBox = document.getElementById('smart-content');
     const kpiBox = document.getElementById('kpi-content');
 
@@ -58,59 +60,27 @@ function renderStep() {
     }
     kpiBox.innerHTML = step.Impact_KPI;
 
-    // --- CHAT & EMAIL CARD (Remplissage par le BAS pour le chat) ---
+    // --- CHAT & EMAIL CARD (Insertion par le BAS) ---
     const chatBox = document.getElementById('chat-mobile');
 
     if (isLastStep && scenario.Is_Email_Card) {
         const emailHtml = `
             <div class="email-card">
-                <div class="email-header">HAPPI : CLÔTURE DE DOSSIER</div>
+                <div class="email-header">HAPPI : CLÔTURE</div>
                 <div class="email-body">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
-                <button class="feedback-btn">JE DONNE MON AVIS</button>
+                <button class="feedback-btn">AVIS</button>
             </div>`;
         chatBox.insertAdjacentHTML('beforeend', emailHtml);
     } else {
         const acteur = step.Acteur;
         const side = (acteur === "Client") ? "Client" : "Happi";
-        const colorClass = acteur.toLowerCase();
         const html = `
             <div class="message-row ${side}">
                 <div class="bubble">
-                    <span class="msg-badge ${colorClass}">${acteur.toUpperCase()}</span>
+                    <span class="msg-badge ${acteur.toLowerCase()}">${acteur.toUpperCase()}</span>
                     <div>${step.Message_UI.replace(/\"/g, "")}</div>
                 </div>
             </div>`;
         chatBox.insertAdjacentHTML('beforeend', html);
     }
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // --- BOUTON DE NAVIGATION ---
-    const btn = document.getElementById('nextBtn');
-    if (isLastStep && scenario.Scenario_Suivant) {
-        btn.innerText = "CONTINUER";
-        btn.onclick = () => {
-            const nextId = scenario.Scenario_Suivant.split(':')[0];
-            // En changeant la valeur du select, on déclenche le onchange qui vide tout
-            const select = document.getElementById('scenario-select');
-            select.value = nextId;
-            select.dispatchEvent(new Event('change'));
-        };
-    } else {
-        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
-        btn.onclick = () => {
-            if (currentStepIdx < scenario.steps.length - 1) {
-                currentStepIdx++;
-                renderStep();
-            }
-        };
-    }
-}
-
-// 4. FOCUS (Inchangé)
-const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
-let focusIdx = 0;
-function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
-document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % sections.length; applyFocus(); };
-document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx - 1 + sections.length) % sections.length; applyFocus(); };
-document.getElementById('resetBtn').onclick = () => location.reload();
-applyFocus();
+    chatBox.
