@@ -2,12 +2,7 @@ let allScenarios = null;
 let currentScenarioId = null;
 let currentStepIdx = 0;
 
-function getTechTime() {
-    const now = new Date();
-    return `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
-}
-
-// 1. CHARGEMENT
+// 1. CHARGEMENT INITIAL
 fetch('scenarios.json').then(r => r.json()).then(data => {
     allScenarios = data;
     const select = document.getElementById('scenario-select');
@@ -26,74 +21,72 @@ document.getElementById('scenario-select').onchange = (e) => {
     currentScenarioId = id;
     currentStepIdx = 0;
 
-    document.querySelectorAll('.inner-label').forEach(el => el.style.display = 'block');
+    // Reset des zones
     document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
-
-    const sep = `<div class="scenario-separator">>>> SESSION : ${id}</div>`;
-    document.getElementById('smart-content').insertAdjacentHTML('afterbegin', sep);
-    document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', sep);
-    document.getElementById('matrix-logs').insertAdjacentHTML('afterbegin', sep);
-
     document.getElementById('chat-mobile').innerHTML = "";
-    document.getElementById('nextBtn').disabled = false;
+    document.getElementById('smart-content').innerHTML = "";
+    document.getElementById('kpi-content').innerHTML = "";
+    document.getElementById('matrix-logs').innerHTML = "";
+
     renderStep();
 };
 
-// 3. MOTEUR DE RENDU
+// 3. RENDU D'UNE ÉTAPE
 function renderStep() {
-    const step = allScenarios[currentScenarioId].steps[currentStepIdx];
+    const scenario = allScenarios[currentScenarioId];
+    const step = scenario.steps[currentStepIdx];
+    const isLastStep = (currentStepIdx === scenario.steps.length - 1);
 
-    // A. LOGS
-    const logArea = document.getElementById('matrix-logs');
-    if (logArea.querySelector('.cursor')) logArea.querySelector('.cursor').remove();
-    logArea.insertAdjacentHTML('afterbegin', `<div><span class="timestamp">${getTechTime()}</span>> ${step.Log_Systeme || "IDLE"} <span class="cursor">_</span></div>`);
-
-    // B. SMART
-    if (step.Explication_SMART) {
-        document.getElementById('smart-content').insertAdjacentHTML('afterbegin', `<div class="insight-item"><span class="timestamp">${getTechTime()}</span> ${step.Explication_SMART}</div>`);
-    }
-
-    // C. KPI
-    if (step.Impact_KPI) {
-        document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', `<div class="kpi-item"><span style="color:#10b981">⚡ KPI :</span> ${step.Impact_KPI}</div>`);
-    }
-
-    // D. CHAT (Avec couleurs dynamiques par Acteur)
-    if (step.Message_UI) {
-        const chatBox = document.getElementById('chat-mobile');
-        const acteur = step.Acteur || "Système";
-        const side = (acteur === "Client") ? "Client" : "Happi";
-        const colorClass = acteur.toLowerCase();
-
-        const html = `
-            <div class="message-row ${side}">
-                <div class="bubble">
-                    <span class="msg-badge ${colorClass}">${acteur.toUpperCase()}</span>
-                    <div>${step.Message_UI.replace(/"/g, "")}</div>
-                </div>
+    // --- Colonne 1 : Interaction ---
+    const chatBox = document.getElementById('chat-mobile');
+    if (isLastStep && scenario.Is_Email_Card) {
+        let emailHtml = `
+            <div class="email-card">
+                <div class="email-header">HAPPI : CLÔTURE</div>
+                <div class="email-body">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
+                <button class="feedback-btn">JE DONNE MON AVIS</button>
             </div>`;
+        chatBox.insertAdjacentHTML('beforeend', emailHtml);
+    } else {
+        const side = (step.Acteur === "Client") ? "Client" : "Happi";
+        chatBox.insertAdjacentHTML('beforeend', `<div class="message-row ${side}"><div class="bubble">${step.Message_UI}</div></div>`);
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-        chatBox.insertAdjacentHTML('beforeend', html);
-        chatBox.scrollTop = chatBox.scrollHeight;
+    // --- Colonne 2 : Intelligence ---
+    const smartBox = document.getElementById('smart-content');
+    const kpiBox = document.getElementById('kpi-content');
+
+    if (isLastStep && scenario.Scenario_ID === "009") {
+        smartBox.innerHTML = `<div class="debrief-final">${scenario.Script_Debrief_IA}</div>`;
+        kpiBox.innerHTML = `<span class="kpi-value">${step.Impact_KPI}</span>`;
+    } else {
+        smartBox.innerHTML = step.Explication_SMART;
+        kpiBox.innerHTML = step.Impact_KPI;
     }
 
-    document.getElementById('nextBtn').innerText = (currentStepIdx >= allScenarios[currentScenarioId].steps.length - 1) ? "FIN" : "SUIVANT";
+    // --- Colonne 3 : Machinerie ---
+    const logBox = document.getElementById('matrix-logs');
+    logBox.insertAdjacentHTML('beforeend', `<div class="log-line">> ${step.Log_Systeme}</div>`);
+    logBox.scrollTop = logBox.scrollHeight;
+
+    // Gestion du bouton
+    const btn = document.getElementById('nextBtn');
+    if (isLastStep && scenario.Scenario_Suivant) {
+        btn.innerText = "CONTINUER";
+        btn.onclick = () => {
+            const nextId = scenario.Scenario_Suivant.split(':')[0];
+            loadScenarioDirectly(nextId);
+        };
+    } else {
+        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
+        btn.onclick = () => { if (currentStepIdx < scenario.steps.length - 1) { currentStepIdx++; renderStep(); } };
+    }
 }
 
-// 4. BOUTONS
-document.getElementById('nextBtn').onclick = () => {
-    if (currentStepIdx < allScenarios[currentScenarioId].steps.length - 1) {
-        currentStepIdx++;
-        renderStep();
-    }
-};
+function loadScenarioDirectly(id) {
+    document.getElementById('scenario-select').value = id;
+    document.getElementById('scenario-select').dispatchEvent(new Event('change'));
+}
 
 document.getElementById('resetBtn').onclick = () => location.reload();
-
-// 5. FOCUS NAVIGATION
-const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
-let focusIdx = 0;
-function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
-document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % 3; applyFocus(); };
-document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx + 2) % 3; applyFocus(); };
-applyFocus();
