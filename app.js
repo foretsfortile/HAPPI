@@ -19,7 +19,7 @@ fetch('scenarios.json').then(r => r.json()).then(data => {
     });
 });
 
-// 2. CHANGEMENT DE SCENARIO (Continuité totale)
+// 2. CHANGEMENT DE SCENARIO
 document.getElementById('scenario-select').onchange = (e) => {
     const id = e.target.value;
     if (!id) return;
@@ -27,13 +27,10 @@ document.getElementById('scenario-select').onchange = (e) => {
     currentStepIdx = 0;
 
     document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
-
-    // On ne vide QUE le chat
     document.getElementById('chat-mobile').innerHTML = "";
 
-    // Insertion des séparateurs de session avec votre style technique
+    // Séparateurs de continuité (Style Matrix)
     const sepHtml = `<div class="scenario-separator" style="color:#00ff41; border-bottom:1px dashed #1e293b; margin:10px 0; font-size:10px;">>>> NEW_CONTEXT_LOADED: ${id}</div>`;
-
     document.getElementById('matrix-logs').insertAdjacentHTML('afterbegin', sepHtml);
     document.getElementById('smart-content').insertAdjacentHTML('afterbegin', sepHtml);
     document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', sepHtml);
@@ -47,24 +44,21 @@ function renderStep() {
     const step = scenario.steps[currentStepIdx];
     const isLastStep = (currentStepIdx >= scenario.steps.length - 1);
 
-    // --- LOGS (RESTAURATION DU CURSEUR MATRIX) ---
+    // --- LOGS (Curseur Matrix à la FIN de la ligne) ---
     const logBox = document.getElementById('matrix-logs');
-    // On retire l'ancien curseur s'il existe
     const oldCursor = logBox.querySelector('.cursor');
     if (oldCursor) oldCursor.remove();
 
-    // On insère la nouvelle ligne avec le curseur clignotant en tête
+    // On place le curseur APPRÈS le texte du log
     const logEntry = `
         <div class="log-line">
-            <span class="cursor">_</span> 
-            <span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme}
+            <span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme} <span class="cursor">_</span>
         </div>`;
     logBox.insertAdjacentHTML('afterbegin', logEntry);
 
-    // --- SMART & KPI (Petits caractères + Remplissage Haut) ---
+    // --- SMART & KPI (Remplissage Haut + Séparateurs) ---
     const smartBox = document.getElementById('smart-content');
     const kpiBox = document.getElementById('kpi-content');
-
     const smallStyle = "font-size: 11px; font-family: 'Fira Code', monospace; margin-bottom: 8px; color: #cbd5e1;";
 
     if (isLastStep && scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
@@ -72,17 +66,15 @@ function renderStep() {
     } else {
         smartBox.insertAdjacentHTML('afterbegin', `<div class="smart-entry" style="${smallStyle}"><span style="color:#00ff41;">></span> ${step.Explication_SMART}</div>`);
     }
-
     kpiBox.insertAdjacentHTML('afterbegin', `<div style="${smallStyle} color:#10b981; font-weight:bold;">[IMPACT] ${step.Impact_KPI}</div>`);
 
     // --- CHAT & EMAIL CARD ---
     const chatBox = document.getElementById('chat-mobile');
-
     if (isLastStep && scenario.Is_Email_Card) {
         chatBox.insertAdjacentHTML('beforeend', `
             <div class="email-card" style="background:rgba(30,41,59,0.9); border:1px solid #10b981; padding:15px; margin:10px 0; border-radius:8px;">
                 <div style="color:#10b981; font-weight:bold; font-size:10px; margin-bottom:5px;">HAPPI : CLÔTURE</div>
-                <div style="font-size:12px; line-height:1.4;">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
+                <div style="font-size:12px;">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
                 <button style="width:100%; margin-top:10px; background:#10b981; border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">JE DONNE MON AVIS</button>
             </div>`);
     } else {
@@ -98,27 +90,30 @@ function renderStep() {
     }
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // --- LOGIQUE BOUTON (Signal visuel Continuer) ---
+    // --- LOGIQUE BOUTON : CONTINUER (Transition) vs SUIVANT ---
     const btn = document.getElementById('nextBtn');
     if (isLastStep && scenario.Scenario_Suivant) {
+        // C'est une fin d'étape avec une transition prévue (ex: 008 vers 009)
         btn.innerText = "CONTINUER";
         btn.onclick = () => {
             const nextId = scenario.Scenario_Suivant.split(':')[0];
-            document.getElementById('scenario-select').value = nextId;
-            document.getElementById('scenario-select').dispatchEvent(new Event('change'));
+            const select = document.getElementById('scenario-select');
+            select.value = nextId;
+            select.dispatchEvent(new Event('change'));
         };
+    } else if (isLastStep) {
+        btn.innerText = "FIN";
+        btn.onclick = null;
     } else {
-        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
+        btn.innerText = "SUIVANT";
         btn.onclick = () => {
-            if (currentStepIdx < scenario.steps.length - 1) {
-                currentStepIdx++;
-                renderStep();
-            }
+            currentStepIdx++;
+            renderStep();
         };
     }
 }
 
-// 4. FOCUS (Inchangé)
+// 4. FOCUS & RESET (Inchangé)
 const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
 let focusIdx = 0;
 function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
