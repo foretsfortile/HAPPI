@@ -83,4 +83,36 @@ function renderStep() {
             </div>`;
         chatBox.insertAdjacentHTML('beforeend', html);
     }
-    chatBox.
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // --- LOGIQUE BOUTON (L'indicateur CONTINUER) ---
+    const btn = document.getElementById('nextBtn');
+
+    if (isLastStep && scenario.Scenario_Suivant) {
+        btn.innerText = "CONTINUER"; // Signal visuel pour le présentateur
+        btn.onclick = () => {
+            const nextId = scenario.Scenario_Suivant.split(':')[0];
+            const select = document.getElementById('scenario-select');
+            select.value = nextId;
+            select.dispatchEvent(new Event('change')); // Déclenche le nettoyage du panneau
+        };
+    } else if (isLastStep) {
+        btn.innerText = "FIN";
+        btn.onclick = null;
+    } else {
+        btn.innerText = "SUIVANT";
+        btn.onclick = () => {
+            currentStepIdx++;
+            renderStep();
+        };
+    }
+}
+
+// 4. FOCUS (Strictement repris de votre fichier original)
+const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
+let focusIdx = 0;
+function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
+document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % sections.length; applyFocus(); };
+document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx - 1 + sections.length) % sections.length; applyFocus(); };
+document.getElementById('resetBtn').onclick = () => location.reload();
+applyFocus();
