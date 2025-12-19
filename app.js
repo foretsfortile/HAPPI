@@ -29,29 +29,30 @@ document.getElementById('scenario-select').onchange = (e) => {
     document.querySelectorAll('.inner-label').forEach(el => el.style.display = 'block');
     document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
 
-    // On ne vide QUE le chat au changement pour garder l'historique visuel si désiré
-    // Ou videz tout ici selon votre préférence hier.
-    document.getElementById('chat-mobile').innerHTML = `<div class="scenario-separator">>>> SESSION : ${id}</div>`;
+    // On garde votre logique de séparateur pour ne pas casser l'historique Matrix
+    const sep = `<div class="scenario-separator">>>> SESSION : ${id}</div>`;
+    document.getElementById('smart-content').insertAdjacentHTML('beforeend', sep);
+    document.getElementById('matrix-logs').insertAdjacentHTML('beforeend', sep);
 
     renderStep();
 };
 
-// 3. RENDU (Extension douce)
+// 3. RENDU (Strictement votre logique de remplissage)
 function renderStep() {
     const scenario = allScenarios[currentScenarioId];
     const step = scenario.steps[currentStepIdx];
     const isLastStep = (currentStepIdx >= scenario.steps.length - 1);
 
-    // --- LOGS ---
+    // LOGS (Remplissage Matrix préservé)
     const logBox = document.getElementById('matrix-logs');
     logBox.insertAdjacentHTML('beforeend', `<div class="log-line"><span class="log-time">${getTechTime()}</span> > ${step.Log_Systeme}</div>`);
     logBox.scrollTop = logBox.scrollHeight;
 
-    // --- SMART & KPI ---
+    // SMART & KPI (Remplissage par le haut préservé)
     const smartBox = document.getElementById('smart-content');
     const kpiBox = document.getElementById('kpi-content');
 
-    // Extension pour le Débrief Final (Scénario 009)
+    // EXTENSION : Débrief IA si c'est la fin du 009
     if (isLastStep && scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
         smartBox.innerHTML = `<div class="debrief-final">${scenario.Script_Debrief_IA}</div>`;
     } else {
@@ -59,16 +60,16 @@ function renderStep() {
     }
     kpiBox.innerHTML = step.Impact_KPI;
 
-    // --- CHAT & EMAIL CARD ---
+    // CHAT (Gestion Acteurs + Extension Email Card)
     const chatBox = document.getElementById('chat-mobile');
 
-    // Extension pour l'Email Card (Fin de scénario)
     if (isLastStep && scenario.Is_Email_Card) {
+        // OBJET EXTENSIBLE : La Carte Email
         const emailHtml = `
             <div class="email-card">
-                <div class="email-header">HAPPI : CLÔTURE DE DOSSIER</div>
-                <div class="email-body">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom || "Client").replace(/\n/g, '<br>')}</div>
-                <button class="feedback-btn" onclick="alert('Feedback enregistré')">JE DONNE MON AVIS</button>
+                <div class="email-header">HAPPI : CLÔTURE</div>
+                <div class="email-body">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
+                <button class="feedback-btn">ENVOYER MON AVIS</button>
             </div>`;
         chatBox.insertAdjacentHTML('beforeend', emailHtml);
     } else {
@@ -87,18 +88,18 @@ function renderStep() {
     }
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // --- BOUTON DE NAVIGATION ---
-    const btn = document.getElementById('nextBtn');
+    // BOUTON (Votre logique + Extension Transition)
+    const nextBtn = document.getElementById('nextBtn');
     if (isLastStep && scenario.Scenario_Suivant) {
-        btn.innerText = "CONTINUER";
-        btn.onclick = () => {
+        nextBtn.innerText = "CONTINUER";
+        nextBtn.onclick = () => {
             const nextId = scenario.Scenario_Suivant.split(':')[0];
             document.getElementById('scenario-select').value = nextId;
             document.getElementById('scenario-select').dispatchEvent(new Event('change'));
         };
     } else {
-        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
-        btn.onclick = () => {
+        nextBtn.innerText = isLastStep ? "FIN" : "SUIVANT";
+        nextBtn.onclick = () => {
             if (currentStepIdx < scenario.steps.length - 1) {
                 currentStepIdx++;
                 renderStep();
@@ -107,12 +108,16 @@ function renderStep() {
     }
 }
 
-// 4. RESET & FOCUS (Inchangé)
+// 4. BOUTONS & FOCUS (Repris mot pour mot de votre fichier fonctionnel)
 document.getElementById('resetBtn').onclick = () => location.reload();
 
 const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
 let focusIdx = 0;
-function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
+function applyFocus() {
+    sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused'));
+}
+
 document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % sections.length; applyFocus(); };
 document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx - 1 + sections.length) % sections.length; applyFocus(); };
+
 applyFocus();
