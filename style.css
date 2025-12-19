@@ -1,4 +1,6 @@
-/* --- BASE & LAYOUT --- */
+/* ============================================================
+   BASES & LAYOUT
+   ============================================================ */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +17,9 @@ body {
     overflow: hidden;
 }
 
-/* --- HEADER --- */
+/* ============================================================
+   HEADER (Sélecteurs & Logo)
+   ============================================================ */
 #main-header {
     height: 60px;
     display: flex;
@@ -39,7 +43,21 @@ body {
     font-size: 12px;
 }
 
-/* --- GRID --- */
+/* Adoucissement des menus du haut */
+#scenario-select,
+#resetBtn {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* ============================================================
+   GRILLE PRINCIPALE (3 Colonnes)
+   ============================================================ */
 #command-center {
     display: grid;
     grid-template-columns: 1.2fr 1.1fr 340px;
@@ -56,6 +74,7 @@ body {
     overflow: hidden;
 }
 
+/* Effet de focus sur la colonne active */
 .col.focused {
     background: rgba(59, 130, 246, 0.05);
     border: 1px solid #3b82f6 !important;
@@ -73,7 +92,9 @@ body {
     flex-shrink: 0;
 }
 
-/* --- COLONNE CENTRALE (SMART & KPI) --- */
+/* ============================================================
+   COLONNE CENTRALE (INTELLIGENCE)
+   ============================================================ */
 .intel-container {
     display: flex;
     flex-direction: column;
@@ -103,7 +124,9 @@ body {
     overflow: hidden;
 }
 
-/* --- SCROLL AREAS --- */
+/* ============================================================
+   ZONES DE CONTENU & SCROLL
+   ============================================================ */
 .inner-label {
     font-size: 10px;
     color: #64748b;
@@ -131,7 +154,9 @@ body {
     overflow-y: auto;
 }
 
-/* --- CHAT & BADGES COULEURS --- */
+/* ============================================================
+   CHAT & MESSAGES
+   ============================================================ */
 .message-row {
     display: flex;
     width: 100%;
@@ -148,6 +173,7 @@ body {
     max-width: 85%;
     font-size: 13px;
     border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .message-row.Client .bubble {
@@ -161,6 +187,7 @@ body {
     border-bottom-left-radius: 2px;
 }
 
+/* BADGES COULEURS ACTEURS */
 .msg-badge {
     display: inline-block;
     padding: 2px 6px;
@@ -191,7 +218,9 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- ÉLÉMENTS TECHNIQUES --- */
+/* ============================================================
+   ÉLÉMENTS TECHNIQUES (LOGS)
+   ============================================================ */
 .cursor {
     display: inline-block;
     color: #00ff41;
@@ -235,33 +264,25 @@ body {
     text-align: center;
 }
 
-/* --- FOOTER & CONTROLS --- */
+/* ============================================================
+   FOOTER (Navigation à droite)
+   ============================================================ */
 #global-controls {
-    height: 60px;
+    height: 70px;
     background: #000;
     border-top: 1px solid #1e293b;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    /* Pousse tout à droite */
     align-items: center;
-    padding: 0 20px;
+    padding: 0 25px;
     flex-shrink: 0;
 }
 
-/* Adoucissement des menus blancs */
-#scenario-select,
-#resetBtn {
-    background-color: #1e293b;
-    color: #e2e8f0;
-    border: 1px solid #334155;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.controls-right {
+.main-command-cluster {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
 }
 
 /* Bloc Focus unifié */
@@ -282,6 +303,7 @@ body {
     cursor: pointer;
     font-weight: bold;
     font-size: 18px;
+    transition: background 0.2s;
 }
 
 .focus-btn:hover {
@@ -297,6 +319,7 @@ body {
     border-right: 1px solid #334155;
 }
 
+/* Bouton Suivant */
 .main-action {
     background: #10b981;
     color: white;
@@ -305,4 +328,15 @@ body {
     border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.main-action:hover {
+    opacity: 0.9;
+}
+
+.main-action:disabled {
+    background: #1e293b;
+    cursor: not-allowed;
+    opacity: 0.5;
 }
