@@ -7,18 +7,24 @@ let currentScenarioSteps = [];
 let currentStepIndex = 0;
 let currentScenarioMeta = {};
 
-// 1. Initialisation
+// 1. Initialisation : Chargement du JSON
 window.onload = async function () {
     try {
         const response = await fetch('scenarios.json');
         scenariosData = await response.json();
         console.log("HAPPI : Données chargées avec succès.");
+
+        // Optionnel : peupler le sélecteur de scénario si présent
+        const selector = document.querySelector('select');
+        if (selector) {
+            selector.onchange = (e) => loadScenario(e.target.value);
+        }
     } catch (error) {
         console.error("Erreur critique de chargement :", error);
     }
 };
 
-// 2. Chargement d'un scénario
+// 2. Chargement d'un scénario par son ID (ex: "005")
 function loadScenario(id) {
     const data = scenariosData[id];
     if (!data) return;
@@ -27,24 +33,28 @@ function loadScenario(id) {
     currentScenarioSteps = data.steps || [];
     currentStepIndex = 0;
 
-    const chatArea = document.getElementById('chat-mobile');
-    if (chatArea) chatArea.innerHTML = ""; // Reset du chat
+    // Nettoyage des zones d'affichage
+    document.querySelector('.col:nth-child(1) .content').innerHTML = ""; // Zone Interaction
+    document.querySelector('.col:nth-child(2) .content').innerHTML = ""; // Zone SMART
+    document.querySelector('.col:nth-child(3) .content').innerHTML = ""; // Zone Log
 
     renderStep();
 }
 
-// 3. Rendu de l'étape
+// 3. Moteur de rendu d'étape
 function renderStep() {
     const step = currentScenarioSteps[currentStepIndex];
-    const chatArea = document.getElementById('chat-mobile');
-    const smartPanel = document.getElementById('smart-content'); // Vérifiez l'ID de votre panneau SMART
-    const nextBtn = document.getElementById('nextBtn');
+    if (!step) return;
 
-    if (!step || !chatArea) return;
+    // Identification des zones cibles (selon vos captures)
+    const chatArea = document.querySelector('.col:nth-child(1) .content');
+    const smartPanel = document.querySelector('.col:nth-child(2) .content');
+    const logPanel = document.querySelector('.col:nth-child(3) .content');
+    const nextBtn = document.getElementById('nextBtn');
 
     const isLastStep = (currentStepIndex === currentScenarioSteps.length - 1);
 
-    // --- AFFICHAGE DE LA CARTE EMAIL ---
+    // --- A. RENDU DE L'INTERACTION (COLONNE 1) ---
     if (isLastStep && currentScenarioMeta.Is_Email_Card) {
         let emailText = currentScenarioMeta.Is_Email_Card
             .replace(/<Client>/g, currentScenarioMeta.Client_Nom || "Cher Client")
@@ -54,11 +64,10 @@ function renderStep() {
             <div class="email-card">
                 <div class="email-header">HAPPI fait le point : Dites-nous tout</div>
                 <div class="email-body">${emailText}</div>
-                <button class="feedback-btn" onclick="alert('Lancement de l\\'enquête...')">JE DONNE MON AVIS</button>
+                <button class="feedback-btn" onclick="alert('Enquête lancée...')">JE DONNE MON AVIS</button>
             </div>`;
         chatArea.insertAdjacentHTML('beforeend', emailHtml);
     } else {
-        // Affichage classique
         const actorClass = (step.Acteur === 'Client') ? 'Client' : 'Happi';
         const bubbleHtml = `
             <div class="message-row ${actorClass}">
@@ -67,17 +76,21 @@ function renderStep() {
         chatArea.insertAdjacentHTML('beforeend', bubbleHtml);
     }
 
-    // --- AFFICHAGE SMART PANEL / DEBRIEF ---
-    if (smartPanel) {
-        // Au dernier step du 009, on affiche le debrief final stratégique
-        if (isLastStep && currentScenarioMeta.Scenario_ID === "009") {
-            smartPanel.innerHTML = `<div class="final-debrief">${currentScenarioMeta.Script_Debrief_IA}</div>`;
-        } else {
-            smartPanel.innerHTML = step.Explication_SMART || "";
-        }
+    // --- B. RENDU SMART & KPI (COLONNE 2) ---
+    // Au dernier step du 009, on affiche le debrief stratégique
+    if (isLastStep && currentScenarioMeta.Scenario_ID === "009") {
+        smartPanel.innerHTML = `<div class="final-debrief">${currentScenarioMeta.Script_Debrief_IA}</div>`;
+    } else {
+        smartPanel.innerHTML = `
+            <p><strong>Explication SMART :</strong><br>${step.Explication_SMART || ""}</p>
+            <p style="margin-top:10px; color:#10b981;"><strong>Impact KPI :</strong><br>${step.Impact_KPI || "---"}</p>
+        `;
     }
 
-    // --- NAVIGATION & TRANSITION ---
+    // --- C. RENDU LOG SYSTÈME (COLONNE 3) ---
+    logPanel.insertAdjacentHTML('beforeend', `<div>> ${step.Log_Systeme || "executing..."}</div>`);
+
+    // --- D. NAVIGATION & TRANSITION ---
     if (isLastStep && currentScenarioMeta.Scenario_Suivant) {
         nextBtn.innerText = "CONTINUER";
         nextBtn.onclick = () => {
@@ -86,6 +99,7 @@ function renderStep() {
         };
     } else {
         nextBtn.innerText = "SUIVANT";
+        nextBtn.className = "main-action"; // S'assurer que la classe CSS est conservée
         nextBtn.onclick = () => {
             if (currentStepIndex < currentScenarioSteps.length - 1) {
                 currentStepIndex++;
@@ -94,16 +108,17 @@ function renderStep() {
         };
     }
 
+    // Scroll auto pour le chat et les logs
     chatArea.scrollTop = chatArea.scrollHeight;
+    logPanel.scrollTop = logPanel.scrollHeight;
 }
 
-// 4. Effet de transition
+// 4. Fonction de transition
 function executeTransition(nextId, message) {
-    const chatArea = document.getElementById('chat-mobile');
-    chatArea.innerHTML = `
-        <div class="transition-overlay">
-            <p>${message || "Traitement en cours..."}</p>
-        </div>`;
+    const chatArea = document.querySelector('.col:nth-child(1) .content');
+    chatArea.innerHTML = `<div class="transition-overlay">${message || "Chargement..."}</div>`;
 
-    setTimeout(() => loadScenario(nextId), 2500);
+    setTimeout(() => {
+        loadScenario(nextId);
+    }, 2500);
 }
