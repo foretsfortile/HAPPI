@@ -12,7 +12,7 @@
     <header id="main-header">
         <div class="brand">
             <div class="logo">HAPPI <span class="acronym">Hybrid Analysis & Predictive Processing Interface</span></div>
-            <div class="slogan">"... ou comment valoriser un éco-système..."</div>
+
         </div>
         <div class="nav-controls">
             <select id="scenario-select">
@@ -26,7 +26,7 @@
         <section class="col action-col">
             <h2 class="col-title" id="scenario-name">SÉLECTIONNEZ UN SCÉNARIO</h2>
             <div class="view-box" id="box-action">
-                <label>Interaction</label>
+                <div class="inner-label" id="interaction-label">Interaction</div>
                 <div id="chat-mobile" class="scroll-area"></div>
             </div>
         </section>
@@ -35,11 +35,11 @@
             <h2 class="col-title">INTELLIGENCE CONTEXTUELLE</h2>
             <div class="insight-stack">
                 <div class="insight-box" id="box-smart">
-                    <label>Explication SMART</label>
+                    <div class="inner-label">Explication SMART</div>
                     <div id="smart-content" class="scroll-area"></div>
                 </div>
-                <div class="insight-box" id="box-kpi">
-                    <label>Impact KPI</label>
+                <div class="insight-box" id="kpi-box">
+                    <div class="inner-label">Impact KPI</div>
                     <div id="kpi-content" class="scroll-area"></div>
                 </div>
             </div>
@@ -48,6 +48,7 @@
         <section class="col system-col">
             <h2 class="col-title">MACHINERIE</h2>
             <div class="matrix-box" id="box-system">
+                <div class="inner-label">Log Système</div>
                 <div id="matrix-logs" class="matrix-area"></div>
             </div>
         </section>
