@@ -2,6 +2,7 @@ let allScenarios = null;
 let currentScenarioId = null;
 let currentStepIdx = 0;
 
+
 function getTechTime() {
     const now = new Date();
     return `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
@@ -40,44 +41,52 @@ document.getElementById('scenario-select').onchange = (e) => {
 };
 
 // 3. MOTEUR DE RENDU
-function renderStep() {
-    const step = allScenarios[currentScenarioId].steps[currentStepIdx];
+// Variable pour stocker le scénario suivant
+let nextScenarioConfig = null;
 
-    // A. LOGS
-    const logArea = document.getElementById('matrix-logs');
-    if (logArea.querySelector('.cursor')) logArea.querySelector('.cursor').remove();
-    logArea.insertAdjacentHTML('afterbegin', `<div><span class="timestamp">${getTechTime()}</span>> ${step.Log_Systeme || "IDLE"} <span class="cursor">_</span></div>`);
+function renderStep(step) {
+    const chatArea = document.getElementById('chat-mobile'); // ou votre ID de zone chat
 
-    // B. SMART
-    if (step.Explication_SMART) {
-        document.getElementById('smart-content').insertAdjacentHTML('afterbegin', `<div class="insight-item"><span class="timestamp">${getTechTime()}</span> ${step.Explication_SMART}</div>`);
-    }
-
-    // C. KPI
-    if (step.Impact_KPI) {
-        document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', `<div class="kpi-item"><span style="color:#10b981">⚡ KPI :</span> ${step.Impact_KPI}</div>`);
-    }
-
-    // D. CHAT (Avec couleurs dynamiques par Acteur)
-    if (step.Message_UI) {
-        const chatBox = document.getElementById('chat-mobile');
-        const acteur = step.Acteur || "Système";
-        const side = (acteur === "Client") ? "Client" : "Happi";
-        const colorClass = acteur.toLowerCase();
-
-        const html = `
-            <div class="message-row ${side}">
-                <div class="bubble">
-                    <span class="msg-badge ${colorClass}">${acteur.toUpperCase()}</span>
-                    <div>${step.Message_UI.replace(/"/g, "")}</div>
+    // 1. Vérification si c'est une carte Email (en fin de scénario)
+    if (currentScenarioMeta.Is_Email_Card && isLastStep()) {
+        const emailHtml = `
+            <div class="email-card">
+                <div class="email-header">HAPPI fait le point : Dites-nous tout</div>
+                <div class="email-body">
+                    ${step.Message_UI}
+                    <div class="email-footer-phrase">
+                        Parce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange et de nous partager vos suggestions pour nous améliorer.
+                    </div>
                 </div>
+                <button class="feedback-btn">JE DONNE MON AVIS</button>
             </div>`;
-
-        chatBox.insertAdjacentHTML('beforeend', html);
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatArea.insertAdjacentHTML('beforeend', emailHtml);
+    } else {
+        // Rendu normal d'un message (votre code existant)
+        appendChatMessage(step);
     }
 
-    document.getElementById('nextBtn').innerText = (currentStepIdx >= allScenarios[currentScenarioId].steps.length - 1) ? "FIN" : "SUIVANT";
+    // 2. Gestion du scénario suivant
+    if (isLastStep() && currentScenarioMeta.Scenario_Suivant) {
+        const parts = currentScenarioMeta.Scenario_Suivant.split(':');
+        const nextId = parts[0];
+        const transitionText = parts[1] || "Chargement du scénario suivant...";
+
+        // On prépare le bouton SUIVANT pour charger le nouveau scénario
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.innerText = "CONTINUER";
+        nextBtn.onclick = () => loadNextScenario(nextId, transitionText);
+    }
+}
+
+function loadNextScenario(id, text) {
+    const chatArea = document.getElementById('chat-mobile');
+    chatArea.innerHTML = `<div class="transition-overlay">${text}</div>`;
+
+    setTimeout(() => {
+        // Appeler votre fonction existante de chargement de scénario
+        fetchScenario(id);
+    }, 2000); // Pause de 2 secondes pour l'effet de transition
 }
 
 // 4. BOUTONS

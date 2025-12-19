@@ -9,6 +9,7 @@
         "System_State_Initial": "",
         "Business_Rules": "",
         "Script_Debrief_IA": "\"Bonjour Mr Dupont, c'est HAPPI. Votre image TV est-elle toujours aussi nette ? J'ai été ravi de pouvoir régler ce souci de synchronisation avec vous ce matin en moins de 2 minutes.\n\nLe petit plus : J'ai noté que tout s'est fait sans attente. Est-ce ce que vous attendez d'un service moderne ?\n\nJe reste à votre écoute et si vous voulez poursuivre cet échange, vous pouvez le faire dans la section Qualité de votre application HAPPI ou depuis votre navigateur [Lien]. Vous êtes ici chez vous.\"",
+        "Is_Email_Card": "",
         "steps": [
             {
                 "ID_Etape": "001.001",
@@ -92,6 +93,7 @@
         "System_State_Initial": "",
         "Business_Rules": "",
         "Script_Debrief_IA": "",
+        "Is_Email_Card": "",
         "steps": [
             {
                 "ID_Etape": "002.001",
@@ -161,6 +163,7 @@
         "System_State_Initial": "",
         "Business_Rules": "",
         "Script_Debrief_IA": "",
+        "Is_Email_Card": "",
         "steps": [
             {
                 "ID_Etape": "003.001",
@@ -216,6 +219,7 @@
         "System_State_Initial": "Global_Satisfaction: 45% ; Network_Load: High ; Active_Incidents: 12",
         "Business_Rules": "1. If Customer == Gold AND Incident_Count > 2 -> Immediate Human Escalation. 2. If Sentiment == Angry -> Enable Supervisor Real-time Monitoring. 3. Compensation Limit -> 1 month free (Advisor) / 3 months free (Supervisor)",
         "Script_Debrief_IA": "\"Chère Mme Martin, ici HAPPI. Je tenais personnellement à m'assurer que votre connexion Fibre Pro est désormais stable et que la solution trouvée avec mon responsable vous apporte satisfaction. Nous savons que ces 3 jours ont été éprouvants pour votre activité.\n\nVotre avis compte : Vous nous avez aidés à identifier une faille dans notre suivi de crise. Pourriez-vous nous dire si l'intervention humaine du superviseur a compensé votre attente ?\n\nSi vous souhaitez approfondir ce point ou nous suggérer une amélioration, je vous attends dans l'espace Qualité de votre application HAPPI ou via ce lien [Lien]. Votre expérience est le cœur de notre métier.\"",
+        "Is_Email_Card": "\"L'incident concernant votre connexion internet est désormais clos. La solution de secours (Clé 4G) a été activée et le geste commercial de trois mois d'abonnement offert a été appliqué à votre dossier. Un récapitulatif complet vous est envoyé par ce message.\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange et de nous partager vos suggestions pour nous améliorer.\"",
         "steps": [
             {
                 "ID_Etape": "005.001",
@@ -355,6 +359,7 @@
         "System_State_Initial": "",
         "Business_Rules": "",
         "Script_Debrief_IA": "",
+        "Is_Email_Card": "",
         "steps": [
             {
                 "ID_Etape": "006.001",
