@@ -10,6 +10,7 @@
         "Business_Rules": "",
         "Script_Debrief_IA": "\"Bonjour Mr Dupont, c'est HAPPI. Votre image TV est-elle toujours aussi nette ? J'ai été ravi de pouvoir régler ce souci de synchronisation avec vous ce matin en moins de 2 minutes.\n\nLe petit plus : J'ai noté que tout s'est fait sans attente. Est-ce ce que vous attendez d'un service moderne ?\n\nJe reste à votre écoute et si vous voulez poursuivre cet échange, vous pouvez le faire dans la section Qualité de votre application HAPPI ou depuis votre navigateur [Lien]. Vous êtes ici chez vous.\"",
         "Is_Email_Card": "",
+        "Scenario_Suivant": "",
         "steps": [
             {
                 "ID_Etape": "001.001",
@@ -94,6 +95,7 @@
         "Business_Rules": "",
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
+        "Scenario_Suivant": "",
         "steps": [
             {
                 "ID_Etape": "002.001",
@@ -164,6 +166,7 @@
         "Business_Rules": "",
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
+        "Scenario_Suivant": "",
         "steps": [
             {
                 "ID_Etape": "003.001",
@@ -220,6 +223,7 @@
         "Business_Rules": "1. If Customer == Gold AND Incident_Count > 2 -> Immediate Human Escalation. 2. If Sentiment == Angry -> Enable Supervisor Real-time Monitoring. 3. Compensation Limit -> 1 month free (Advisor) / 3 months free (Supervisor)",
         "Script_Debrief_IA": "\"Chère Mme Martin, ici HAPPI. Je tenais personnellement à m'assurer que votre connexion Fibre Pro est désormais stable et que la solution trouvée avec mon responsable vous apporte satisfaction. Nous savons que ces 3 jours ont été éprouvants pour votre activité.\n\nVotre avis compte : Vous nous avez aidés à identifier une faille dans notre suivi de crise. Pourriez-vous nous dire si l'intervention humaine du superviseur a compensé votre attente ?\n\nSi vous souhaitez approfondir ce point ou nous suggérer une amélioration, je vous attends dans l'espace Qualité de votre application HAPPI ou via ce lien [Lien]. Votre expérience est le cœur de notre métier.\"",
         "Is_Email_Card": "\"L'incident concernant votre connexion internet est désormais clos. La solution de secours (Clé 4G) a été activée et le geste commercial de trois mois d'abonnement offert a été appliqué à votre dossier. Un récapitulatif complet vous est envoyé par ce message.\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange et de nous partager vos suggestions pour nous améliorer.\"",
+        "Scenario_Suivant": "",
         "steps": [
             {
                 "ID_Etape": "005.001",
@@ -332,20 +336,6 @@
                 "Impact_KPI": "CHURN_PREVENTED ; CSAT_RECOVERY",
                 "Couleur_Status": "",
                 "Explication_SMART": "SUCCÈS MÉDIATION : Le client passe de \"Prêt à partir\" à \"Consolidé\". Coût de rétention : 90€ vs Perte contrat : 1200€/an."
-            },
-            {
-                "ID_Etape": "005.009",
-                "Scenario_ID": "005",
-                "Acteur": "HAPPI",
-                "Type_Vue": "Mobile",
-                "Template_ID": "T_DEBRIEF",
-                "Label_IA": "",
-                "Message_UI": "\"Mme Martin, on a tenu le choc ensemble...\"",
-                "Log_Systeme": "",
-                "Analyse_NLP": "",
-                "Impact_KPI": "",
-                "Couleur_Status": "",
-                "Explication_SMART": ""
             }
         ]
     },
@@ -360,6 +350,7 @@
         "Business_Rules": "",
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
+        "Scenario_Suivant": "",
         "steps": [
             {
                 "ID_Etape": "006.001",
@@ -402,6 +393,218 @@
                 "Impact_KPI": "GLOBAL_EFFICIENCY",
                 "Couleur_Status": "",
                 "Explication_SMART": "AIDE AU PILOTAGE : Ce n'est plus un outil de chat, c'est un outil d'aide à la décision pour le Directeur Client."
+            }
+        ]
+    },
+    "008": {
+        "Scenario_ID": "008",
+        "Nom_Scenario": "Consolidation & Typification Qualité",
+        "Description": "",
+        "Client_Nom": "",
+        "Client_Contrat": "",
+        "Context_Initial": "",
+        "System_State_Initial": "",
+        "Business_Rules": "",
+        "Script_Debrief_IA": "",
+        "Is_Email_Card": "",
+        "Scenario_Suivant": "009:Génération du mail final personnalisé.",
+        "steps": [
+            {
+                "ID_Etape": "008.001",
+                "Scenario_ID": "008",
+                "Acteur": "HAPPI",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "(Notification système) : Archivage incident 005 terminé. Début du cycle d'apprentissage.",
+                "Log_Systeme": "",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "CONSOLIDATION : L'IA extrait les points de friction majeurs du scénario précédent."
+            },
+            {
+                "ID_Etape": "008.002",
+                "Scenario_ID": "008",
+                "Acteur": "HAPPI",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "Analyse Sentiment : Frustration 80%, Apaisement final 90%.\nProposition V1 (Financière) : \"Votre geste commercial de 3 mois offerts est validé...\"",
+                "Log_Systeme": "",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "PROPOSITION IA : HAPPI propose par défaut une version basée sur les faits et le dédommagement."
+            },
+            {
+                "ID_Etape": "008.003",
+                "Scenario_ID": "008",
+                "Acteur": "Service Qualité",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"HAPPI, pour le mail de clôture, peux-tu insister sur notre réactivité humaine plutôt que sur le geste financier ?\"",
+                "Log_Systeme": "",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "ARBITRAGE : Le Service Qualité réoriente l'intention vers la valeur émotionnelle."
+            },
+            {
+                "ID_Etape": "008.004",
+                "Scenario_ID": "008",
+                "Acteur": "HAPPI",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"Compris. Ajustement du modèle de réponse. Intention : Valoriser le rôle du superviseur.\"\nProposition V2 (Relationnelle) :\n\"HAPPI fait le point : Dites-nous tout !\n\nChèr <Client>, nous sommes conscients que ces derniers jours ont été éprouvants pour votre activité et nous vous remercions de votre patience. L'intervention de notre responsable a permis de rétablir votre Fibre Pro et votre liaison téléphonique et nous avons le plaisir de vous confirmer le geste commercial de 3 mois offerts.\n\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange avec nos équipes et de nous partager vos suggestions pour nous améliorer.\"",
+                "Log_Systeme": "",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "AGILITÉ : HAPPI régénère le message en temps réel selon la nouvelle contrainte métier."
+            },
+            {
+                "ID_Etape": "008.005",
+                "Scenario_ID": "008",
+                "Acteur": "Service Qualité",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"Parfait. Typification validée pour les clients partageant ce profil.\"",
+                "Log_Systeme": "",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "VALIDATION : VALIDATION : Le modèle V2 devient la norme pour cette typologie de relation."
+            }
+        ]
+    },
+    "009": {
+        "Scenario_ID": "009",
+        "Nom_Scenario": "Médiation & Conflit",
+        "Description": "Gestion d'une escalade suite à une panne prolongée et échec du premier niveau.",
+        "Client_Nom": "Mr. Juste",
+        "Client_Contrat": "Fibre Pro - Gold",
+        "Context_Initial": "6ème appel en 48h. Client très mécontent.",
+        "System_State_Initial": "Global_Satisfaction: 45% ; Network_Load: High ; Active_Incidents: 12",
+        "Business_Rules": "1. If Customer == Gold AND Incident_Count > 2 -> Immediate Human Escalation. 2. If Sentiment == Angry -> Enable Supervisor Real-time Monitoring. 3. Compensation Limit -> 1 month free (Advisor) / 3 months free (Supervisor)",
+        "Script_Debrief_IA": "\"Voici l'aboutissement de notre processus de typification. Grâce aux directives du Service Qualité reçues lors de l'étape précédente, j'ai généré une carte de clôture qui ne se contente plus de résoudre un problème technique, mais reconstruit activement la relation de confiance avec Mme Martin et, par extension, avec l'ensemble des clients partageant ce même parcours émotionnel ou présentant un profil de risque similaire.\"",
+        "Is_Email_Card": "\"HAPPI fait le point : Dites-nous tout !\n\nChère Mr. Juste, nous sommes conscients que ces derniers jours ont été éprouvants pour votre activité et nous vous remercions de votre patience. L'intervention de notre responsable a permis de rétablir votre Fibre Pro et votre liaison téléphonique et nous avons le plaisir de vous confirmer le geste commercial de 3 mois offerts.\n\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange avec nos équipes et de nous partager vos suggestions pour nous améliorer.\"",
+        "Scenario_Suivant": "",
+        "steps": [
+            {
+                "ID_Etape": "009.001",
+                "Scenario_ID": "009",
+                "Acteur": "Client",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"C'est inadmissible, ma connexion est toujours coupée et plus de téléphone! Je veux parler à un responsable.\"",
+                "Log_Systeme": "nlp.parse_intent()",
+                "Analyse_NLP": "INTENT_CHURN_RISK ; SENTIMENT_ANGRY",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "DÉTECTION CRITIQUE : L'IA identifie un lexique de rupture (\"inadmissible\", \"responsable\"). Score de risque de résiliation (Churn) : 92%."
+            },
+            {
+                "ID_Etape": "009.002",
+                "Scenario_ID": "009",
+                "Acteur": "HAPPI",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "Conseil IA",
+                "Message_UI": "\"Je comprends votre frustration, Mr Juste. Je vous mets immédiatement en relation avec un expert.\"",
+                "Log_Systeme": "workflow.handoff_to_human()",
+                "Analyse_NLP": "TRANSITION_TO_ADVISOR",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "ARBITRAGE STRATÉGIQUE : Désengagement de l'automate. L'IA juge le coût d'un transfert humain inférieur au risque de perte définitive du client \"Gold\"."
+            },
+            {
+                "ID_Etape": "009.003",
+                "Scenario_ID": "009",
+                "Acteur": "Conseiller",
+                "Type_Vue": "Mobile | Agent",
+                "Template_ID": "T_AGENT",
+                "Label_IA": "",
+                "Message_UI": "\"Bonjour Mr Juste, je prends le relais. Je vois votre dossier.\"",
+                "Log_Systeme": "crm.fetch_history()",
+                "Analyse_NLP": "",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "INJECTION DE CONTEXTE : Le conseiller reçoit un résumé compressé des 48h précédentes. Gain de temps estimé sur le diagnostic : 4 minutes."
+            },
+            {
+                "ID_Etape": "009.004",
+                "Scenario_ID": "009",
+                "Acteur": "Superviseur",
+                "Type_Vue": "Superviseur_RT",
+                "Template_ID": "T_SUPERVISEUR_RT",
+                "Label_IA": "",
+                "Message_UI": "(Alerte sur le Dashboard)",
+                "Log_Systeme": "alert.trigger_sla_warning()",
+                "Analyse_NLP": "MONITOR_CRITICAL_CONVERSATION",
+                "Impact_KPI": "SLA_CRITICAL ; SATISFACTION_DROP",
+                "Couleur_Status": "RED",
+                "Explication_SMART": "SURVEILLANCE ACTIVE : Le système déclenche une alerte temps réel sur le dashboard de supervision pour garantir un dénouement sous 15 minutes (SLA Pro)."
+            },
+            {
+                "ID_Etape": "009.005",
+                "Scenario_ID": "009",
+                "Acteur": "Conseiller",
+                "Type_Vue": "Agent",
+                "Template_ID": "T_AGENT",
+                "Label_IA": "",
+                "Message_UI": "\"Mr Juste, pour nous excuser de la gêne occasionnée, je peux vous offrir 1 mois d'abonnement.\"",
+                "Log_Systeme": "crm.offer_compensation(1_MO)",
+                "Analyse_NLP": "SUGGEST_RETENTION_LEVEL_1",
+                "Impact_KPI": "",
+                "Couleur_Status": "",
+                "Explication_SMART": "AIDE À LA DÉCISION : L'IA suggère ce montant selon le profil \"Gold\". Le bouton de validation est pré-activé."
+            },
+            {
+                "ID_Etape": "009.006",
+                "Scenario_ID": "009",
+                "Acteur": "Client",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"Un mois ? C'est une plaisanterie ? Ça fait 3 jours que je ne peux pas travailler ! Je résilie.\"",
+                "Log_Systeme": "nlp.parse_intent()",
+                "Analyse_NLP": "NEGOTIATION_FAILED ; CHURN_IMMINENT",
+                "Impact_KPI": "CSAT_CRITICAL",
+                "Couleur_Status": "",
+                "Explication_SMART": "ALERTE IMPASSE : Échec de la négociation de niveau 1. L'IA détecte que l'offre est jugée insultante par rapport au préjudice pro."
+            },
+            {
+                "ID_Etape": "009.007",
+                "Scenario_ID": "009",
+                "Acteur": "Superviseur",
+                "Type_Vue": "Superviseur_RT",
+                "Template_ID": "T_SUP_RT",
+                "Label_IA": "",
+                "Message_UI": "\"(Intervention) Bonjour, je suis le responsable. Je valide 3 mois offerts et l'envoi immédiat d'une clé 4G.\"",
+                "Log_Systeme": "sup.override_limit(3_MO)",
+                "Analyse_NLP": "CRITICAL_OVERRIDE;SUPERVISOR_EMPOWERMENT",
+                "Impact_KPI": "SLA_RESOLVED",
+                "Couleur_Status": "",
+                "Explication_SMART": "INTERVENTION STRATÉGIQUE : Le Superviseur utilise son pouvoir de dérogation (Règle #3) pour stopper l'attrition."
+            },
+            {
+                "ID_Etape": "009.008",
+                "Scenario_ID": "009",
+                "Acteur": "Client",
+                "Type_Vue": "Mobile",
+                "Template_ID": "T_MOBILE",
+                "Label_IA": "",
+                "Message_UI": "\"Merci. C'est enfin une réponse à la hauteur. J'accepte.\"",
+                "Log_Systeme": "sentiment.analyze()",
+                "Analyse_NLP": "SENTIMENT_CALM ; INTENT_RETAINED",
+                "Impact_KPI": "CHURN_PREVENTED ; CSAT_RECOVERY",
+                "Couleur_Status": "",
+                "Explication_SMART": "\"Voici l'aboutissement de notre processus de typification. Grâce aux directives du Service Qualité reçues lors de l'étape précédente, j'ai généré une carte de clôture qui ne se contente plus de résoudre un problème technique, mais reconstruit activement la relation de confiance avec Mr Juste et, par extension, avec l'ensemble des clients partageant ce même parcours émotionnel ou présentant un profil de risque similaire.\""
             }
         ]
     }
