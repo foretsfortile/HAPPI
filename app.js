@@ -1,108 +1,99 @@
-/* ============================================================
-   HAPPI - VERSION STABLE RESTAURÉE
-   Note : Ce code ne contient AUCUN style. Il utilise votre CSS.
-   ============================================================ */
+let allScenarios = null;
+let currentScenarioId = null;
+let currentStepIdx = 0;
 
-let scenariosData = {};
-let currentScenarioSteps = [];
-let currentStepIndex = 0;
-let currentScenarioMeta = {};
+function getTechTime() {
+    const now = new Date();
+    return `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
+}
 
-// 1. Initialisation (Le menu réapparaît)
-window.onload = async function () {
-    try {
-        const response = await fetch('scenarios.json');
-        scenariosData = await response.json();
+// 1. CHARGEMENT
+fetch('scenarios.json').then(r => r.json()).then(data => {
+    allScenarios = data;
+    const select = document.getElementById('scenario-select');
+    Object.keys(data).forEach(id => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.innerText = `${id} - ${data[id].Nom_Scenario}`;
+        select.appendChild(opt);
+    });
+});
 
-        const selector = document.querySelector('select');
-        if (selector) {
-            selector.innerHTML = '<option value="">-- Sélectionner un scénario --</option>';
-            Object.keys(scenariosData).forEach(id => {
-                const opt = document.createElement('option');
-                opt.value = id;
-                opt.innerText = id + " - " + scenariosData[id].Nom_Scenario;
-                selector.appendChild(opt);
-            });
-            selector.onchange = (e) => loadScenario(e.target.value);
-        }
-    } catch (e) { console.error("Erreur : Fichier scenarios.json manquant."); }
+// 2. CHANGEMENT DE SCENARIO
+document.getElementById('scenario-select').onchange = (e) => {
+    const id = e.target.value;
+    if (!id) return;
+    currentScenarioId = id;
+    currentStepIdx = 0;
+
+    document.querySelectorAll('.inner-label').forEach(el => el.style.display = 'block');
+    document.getElementById('scenario-name').innerText = allScenarios[id].Nom_Scenario;
+
+    const sep = `<div class="scenario-separator">>>> SESSION : ${id}</div>`;
+    document.getElementById('smart-content').insertAdjacentHTML('afterbegin', sep);
+    document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', sep);
+    document.getElementById('matrix-logs').insertAdjacentHTML('afterbegin', sep);
+
+    document.getElementById('chat-mobile').innerHTML = "";
+    document.getElementById('nextBtn').disabled = false;
+    renderStep();
 };
 
-// 2. Chargement : On vide les zones SANS toucher aux IDs
-function loadScenario(id) {
-    if (!id || !scenariosData[id]) return;
-    currentScenarioMeta = scenariosData[id];
-    currentScenarioSteps = currentScenarioMeta.steps || [];
-    currentStepIndex = 0;
-
-    // On cible les zones de contenu par leurs IDs d'origine
-    const zones = ["chat-mobile", "smart-content", "log-content"];
-    zones.forEach(idZone => {
-        const el = document.getElementById(idZone);
-        if (el) el.innerHTML = "";
-    });
-
-    renderStep();
-}
-
-// 3. Rendu : On pose les textes dans les "boîtes" existantes
+// 3. MOTEUR DE RENDU
 function renderStep() {
-    const step = currentScenarioSteps[currentStepIndex];
-    if (!step) return;
+    const step = allScenarios[currentScenarioId].steps[currentStepIdx];
 
-    const chatZone = document.getElementById('chat-mobile');
-    const smartZone = document.getElementById('smart-content');
-    const logZone = document.getElementById('log-content');
-    const nextBtn = document.getElementById('nextBtn');
+    // A. LOGS
+    const logArea = document.getElementById('matrix-logs');
+    if (logArea.querySelector('.cursor')) logArea.querySelector('.cursor').remove();
+    logArea.insertAdjacentHTML('afterbegin', `<div><span class="timestamp">${getTechTime()}</span>> ${step.Log_Systeme || "IDLE"} <span class="cursor">_</span></div>`);
 
-    const isLast = (currentStepIndex === currentScenarioSteps.length - 1);
-
-    // --- INTERACTION ---
-    if (chatZone) {
-        if (isLast && currentScenarioMeta.Is_Email_Card) {
-            let emailTxt = currentScenarioMeta.Is_Email_Card.replace(/<Client>/g, currentScenarioMeta.Client_Nom).replace(/\n/g, '<br>');
-            chatZone.insertAdjacentHTML('beforeend', `
-                <div class="email-card">
-                    <div class="email-header">HAPPI : CLÔTURE</div>
-                    <div class="email-body">${emailTxt}</div>
-                    <button class="feedback-btn">JE DONNE MON AVIS</button>
-                </div>`);
-        } else {
-            const side = (step.Acteur === 'Client') ? 'Client' : 'Happi';
-            chatZone.insertAdjacentHTML('beforeend', `
-                <div class="message-row ${side}">
-                    <div class="bubble">${step.Message_UI}</div>
-                </div>`);
-        }
-        chatZone.scrollTop = chatZone.scrollHeight;
+    // B. SMART
+    if (step.Explication_SMART) {
+        document.getElementById('smart-content').insertAdjacentHTML('afterbegin', `<div class="insight-item"><span class="timestamp">${getTechTime()}</span> ${step.Explication_SMART}</div>`);
     }
 
-    // --- SMART PANEL ---
-    if (smartZone) {
-        if (isLast && currentScenarioMeta.Scenario_ID === "009") {
-            smartZone.innerHTML = `<div class="debrief-final">${currentScenarioMeta.Script_Debrief_IA}</div>`;
-        } else {
-            smartZone.innerHTML = `<h4>ANALYSE</h4><p>${step.Explication_SMART}</p><h4>KPI</h4><p>${step.Impact_KPI}</p>`;
-        }
+    // C. KPI
+    if (step.Impact_KPI) {
+        document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', `<div class="kpi-item"><span style="color:#10b981">⚡ KPI :</span> ${step.Impact_KPI}</div>`);
     }
 
-    // --- LOGS ---
-    if (logZone) {
-        logZone.insertAdjacentHTML('beforeend', `<div class="log-line">> ${step.Log_Systeme}</div>`);
-        logZone.scrollTop = logZone.scrollHeight;
+    // D. CHAT (Avec couleurs dynamiques par Acteur)
+    if (step.Message_UI) {
+        const chatBox = document.getElementById('chat-mobile');
+        const acteur = step.Acteur || "Système";
+        const side = (acteur === "Client") ? "Client" : "Happi";
+        const colorClass = acteur.toLowerCase();
+
+        const html = `
+            <div class="message-row ${side}">
+                <div class="bubble">
+                    <span class="msg-badge ${colorClass}">${acteur.toUpperCase()}</span>
+                    <div>${step.Message_UI.replace(/"/g, "")}</div>
+                </div>
+            </div>`;
+
+        chatBox.insertAdjacentHTML('beforeend', html);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // --- BOUTON ---
-    if (nextBtn) {
-        nextBtn.innerText = (isLast && currentScenarioMeta.Scenario_Suivant) ? "CONTINUER" : "SUIVANT";
-        nextBtn.onclick = () => {
-            if (isLast && currentScenarioMeta.Scenario_Suivant) {
-                const [nextId] = currentScenarioMeta.Scenario_Suivant.split(':');
-                loadScenario(nextId);
-            } else if (currentStepIndex < currentScenarioSteps.length - 1) {
-                currentStepIndex++;
-                renderStep();
-            }
-        };
-    }
+    document.getElementById('nextBtn').innerText = (currentStepIdx >= allScenarios[currentScenarioId].steps.length - 1) ? "FIN" : "SUIVANT";
 }
+
+// 4. BOUTONS
+document.getElementById('nextBtn').onclick = () => {
+    if (currentStepIdx < allScenarios[currentScenarioId].steps.length - 1) {
+        currentStepIdx++;
+        renderStep();
+    }
+};
+
+document.getElementById('resetBtn').onclick = () => location.reload();
+
+// 5. FOCUS NAVIGATION
+const sections = [document.querySelector('.action-col'), document.querySelector('.brain-col'), document.querySelector('.system-col')];
+let focusIdx = 0;
+function applyFocus() { sections.forEach((s, i) => i === focusIdx ? s.classList.add('focused') : s.classList.remove('focused')); }
+document.getElementById('focusNext').onclick = () => { focusIdx = (focusIdx + 1) % 3; applyFocus(); };
+document.getElementById('focusPrev').onclick = () => { focusIdx = (focusIdx + 2) % 3; applyFocus(); };
+applyFocus();
