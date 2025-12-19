@@ -70,11 +70,15 @@ function renderStep() {
 
     // --- CHAT & EMAIL CARD ---
     const chatBox = document.getElementById('chat-mobile');
+
     if (isLastStep && scenario.Is_Email_Card) {
+        // CORRECTION : On vide le chat car le mail clôture l'expérience
+        chatBox.innerHTML = "";
+
         chatBox.insertAdjacentHTML('beforeend', `
             <div class="email-card" style="background:rgba(30,41,59,0.9); border:1px solid #10b981; padding:15px; margin:10px 0; border-radius:8px;">
                 <div style="color:#10b981; font-weight:bold; font-size:10px; margin-bottom:5px;">HAPPI : CLÔTURE</div>
-                <div style="font-size:12px;">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
+                <div style="font-size:12px; line-height:1.4;">${scenario.Is_Email_Card.replace(/<Client>/g, scenario.Client_Nom).replace(/\n/g, '<br>')}</div>
                 <button style="width:100%; margin-top:10px; background:#10b981; border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">JE DONNE MON AVIS</button>
             </div>`);
     } else {
