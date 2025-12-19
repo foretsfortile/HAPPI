@@ -278,3 +278,61 @@ body {
     text-transform: uppercase;
     display: none;
 }
+
+/* Verrouille la taille de la colonne intelligence */
+.intel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
+    /* Espace entre les deux boites */
+    overflow: hidden;
+}
+
+/* Les boites SMART et KPI */
+.box-intel {
+    background: #161e2d;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#box-smart {
+    flex: 2;
+}
+
+/* SMART prend 2/3 de l'espace */
+#box-kpi {
+    flex: 1;
+}
+
+/* KPI prend 1/3 */
+
+/* Correction pour ne pas couper le bas du cadre */
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    margin-bottom: 5px;
+    /* Petit espace de sécurité interne */
+}
+
+/* Taille fixe pour tous les textes techniques */
+.insight-item,
+.kpi-item,
+.timestamp,
+.matrix-area {
+    font-size: 11px !important;
+    line-height: 1.4;
+}
+
+/* Correction pour ne pas couper le bas du cadre */
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    margin-bottom: 5px;
+    /* Petit espace de sécurité interne */
+}
