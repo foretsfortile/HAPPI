@@ -11,6 +11,7 @@
         "Script_Debrief_IA": "\"Bonjour Mr Dupont, c'est HAPPI. Votre image TV est-elle toujours aussi nette ? J'ai été ravi de pouvoir régler ce souci de synchronisation avec vous ce matin en moins de 2 minutes.\n\nLe petit plus : J'ai noté que tout s'est fait sans attente. Est-ce ce que vous attendez d'un service moderne ?\n\nJe reste à votre écoute et si vous voulez poursuivre cet échange, vous pouvez le faire dans la section Qualité de votre application HAPPI ou depuis votre navigateur [Lien]. Vous êtes ici chez vous.\"",
         "Is_Email_Card": "",
         "Scenario_Suivant": "",
+        "IA": true,
         "steps": [
             {
                 "ID_Etape": "001.001",
@@ -96,6 +97,7 @@
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
         "Scenario_Suivant": "",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "002.001",
@@ -167,6 +169,7 @@
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
         "Scenario_Suivant": "",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "003.001",
@@ -224,6 +227,7 @@
         "Script_Debrief_IA": "\"Chère Mme Martin, ici HAPPI. Je tenais personnellement à m'assurer que votre connexion Fibre Pro est désormais stable et que la solution trouvée avec mon responsable vous apporte satisfaction. Nous savons que ces 3 jours ont été éprouvants pour votre activité.\n\nVotre avis compte : Vous nous avez aidés à identifier une faille dans notre suivi de crise. Pourriez-vous nous dire si l'intervention humaine du superviseur a compensé votre attente ?\n\nSi vous souhaitez approfondir ce point ou nous suggérer une amélioration, je vous attends dans l'espace Qualité de votre application HAPPI ou via ce lien [Lien]. Votre expérience est le cœur de notre métier.\"",
         "Is_Email_Card": "\"L'incident concernant votre connexion internet est désormais clos. La solution de secours (Clé 4G) a été activée et le geste commercial de trois mois d'abonnement offert a été appliqué à votre dossier. Un récapitulatif complet vous est envoyé par ce message.\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange et de nous partager vos suggestions pour nous améliorer.\"",
         "Scenario_Suivant": "",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "005.001",
@@ -351,6 +355,7 @@
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
         "Scenario_Suivant": "",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "006.001",
@@ -408,6 +413,7 @@
         "Script_Debrief_IA": "",
         "Is_Email_Card": "",
         "Scenario_Suivant": "009:Génération du mail final personnalisé.",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "008.001",
@@ -493,6 +499,7 @@
         "Script_Debrief_IA": "\"Voici l'aboutissement de notre processus de typification. Grâce aux directives du Service Qualité reçues lors de l'étape précédente, j'ai généré une carte de clôture qui ne se contente plus de résoudre un problème technique, mais reconstruit activement la relation de confiance avec Mme Martin et, par extension, avec l'ensemble des clients partageant ce même parcours émotionnel ou présentant un profil de risque similaire.\"",
         "Is_Email_Card": "\"HAPPI fait le point : Dites-nous tout !\n\nChère Mr. Juste, nous sommes conscients que ces derniers jours ont été éprouvants pour votre activité et nous vous remercions de votre patience. L'intervention de notre responsable a permis de rétablir votre Fibre Pro et votre liaison téléphonique et nous avons le plaisir de vous confirmer le geste commercial de 3 mois offerts.\n\nParce que votre ressenti est notre meilleur guide, nous vous serions reconnaissants de nous dire comment vous avez vécu cet échange avec nos équipes et de nous partager vos suggestions pour nous améliorer.\"",
         "Scenario_Suivant": "",
+        "IA": "",
         "steps": [
             {
                 "ID_Etape": "009.001",

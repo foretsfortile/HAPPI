@@ -15,6 +15,7 @@
             <div class="slogan">&ldquo; <i>... ou comment valoriser un éco-système...</i> &rdquo;</div>
         </div>
         <div class="nav-controls">
+            <button id="toggleIA">IA OFF</button>
             <select id="scenario-select">
                 <option value="">-- Choisir un Scénario --</option>
             </select>
@@ -26,7 +27,7 @@
         <section class="col action-col">
             <h2 class="col-title" id="scenario-name">SÉLECTIONNEZ UN SCÉNARIO</h2>
             <div class="view-box" id="box-action">
-                <div class="inner-label" id="interaction-label" style="display:none;">Interaction</div>
+                <div class="inner-label" id="interaction-label">Interaction</div>
                 <div id="chat-mobile" class="scroll-area"></div>
             </div>
         </section>
@@ -35,12 +36,11 @@
             <h2 class="col-title">Intelligence Contextuelle</h2>
             <div class="intel-container">
                 <div class="box-intel" id="box-smart">
-                    <div class="inner-label" style="display:none;">Explication SMART</div>
+                    <div class="inner-label">Explication SMART</div>
                     <div id="smart-content" class="scroll-area"></div>
                 </div>
-
                 <div class="box-intel" id="box-kpi">
-                    <div class="inner-label" style="display:none;">Impact KPI</div>
+                    <div class="inner-label">Impact KPI</div>
                     <div id="kpi-content" class="scroll-area"></div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <section class="col system-col">
             <h2 class="col-title">MACHINERIE</h2>
             <div class="matrix-box" id="box-system">
-                <div class="inner-label" style="display:none;">Log Système</div>
+                <div class="inner-label">Log Système</div>
                 <div id="matrix-logs" class="matrix-area"></div>
             </div>
         </section>
@@ -65,7 +65,6 @@
             <button id="nextBtn" class="main-action">SUIVANT</button>
         </div>
     </footer>
-
     <script src="app.js"></script>
 </body>
 
