@@ -65,7 +65,7 @@ document.getElementById('scenario-select').onchange = (e) => {
 function renderStep() {
     const scenario = allScenarios[currentScenarioId];
     const step = scenario.steps[currentStepIdx];
-    const isLastStep = (currentStepIdx += 1 >= scenario.steps.length);
+    const isLastStep = (currentStepIdx + 1 >= scenario.steps.length);
 
     // LOGS + CURSEUR MATRIX
     const logBox = document.getElementById('matrix-logs');
