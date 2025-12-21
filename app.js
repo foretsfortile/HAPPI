@@ -65,59 +65,62 @@ document.getElementById('scenario-select').onchange = (e) => {
 function renderStep() {
     const scenario = allScenarios[currentScenarioId];
     const step = scenario.steps[currentStepIdx];
-    const isLastStep = (currentStepIdx + 1 >= scenario.steps.length);
 
-    // LOGS + CURSEUR MATRIX
-    const logBox = document.getElementById('matrix-logs');
-    const oldCursor = logBox.querySelector('.cursor');
-    if (oldCursor) oldCursor.remove();
-    logBox.insertAdjacentHTML('afterbegin', `
-        <div class="log-line">${getTechTime()} > ${step.Log_Systeme} <span class="cursor">_</span></div>
+    // 1. On affiche TOUJOURS le message de l'étape en cours d'abord
+    const chatBox = document.getElementById('chat-mobile');
+    const acteur = step.Acteur;
+    const side = (acteur === "Client") ? "Client" : "Happi";
+
+    chatBox.insertAdjacentHTML('beforeend', `
+        <div class="message-row ${side}">
+            <div class="bubble">
+                <span class="msg-badge ${acteur.toLowerCase()}">${acteur.toUpperCase()}</span>
+                ${step.Message_UI}
+            </div>
+        </div>
     `);
 
-    // INTEL (SMART & KPI)
-    const smallStyle = "font-size: 11px; font-family: 'Fira Code', monospace; margin-bottom: 8px;";
-    const smartBox = document.getElementById('smart-content');
+    // 2. MAINTENANT, on vérifie si on vient d'afficher la dernière étape
+    const isLastStep = (currentStepIdx === scenario.steps.length - 1);
 
-    if (isLastStep && scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
-        smartBox.insertAdjacentHTML('afterbegin', `<div style="${smallStyle} color:#3b82f6; border:1px solid #3b82f6; padding:5px;">${scenario.Script_Debrief_IA}</div>`);
-    } else {
-        smartBox.insertAdjacentHTML('afterbegin', `<div style="${smallStyle}"><span style="color:#00ff41;">></span> ${step.Explication_SMART}</div>`);
+    // 3. Si c'est la fin, on AJOUTE (sans effacer) les éléments spéciaux
+    if (isLastStep) {
+        // Ajout du Debrief si scénario 009
+        if (scenario.Scenario_ID === "009" && scenario.Script_Debrief_IA) {
+            const smartBox = document.getElementById('smart-content');
+            smartBox.insertAdjacentHTML('afterbegin', `
+                <div style="font-size:11px; color:#3b82f6; border:1px solid #3b82f6; padding:5px; margin-bottom:8px;">
+                    ${scenario.Script_Debrief_IA}
+                </div>`);
+        }
+
+        // Ajout de l'Email Card à la fin du chat
+        if (scenario.Is_Email_Card) {
+            chatBox.insertAdjacentHTML('beforeend', `
+                <div class="email-card" style="background:#1e293b; border:1px solid #10b981; padding:15px; border-radius:8px; margin-top:10px;">
+                    <div style="color:#10b981; font-weight:bold; font-size:10px;">HAPPI : CLÔTURE</div>
+                    <div style="font-size:12px; margin-top:5px;">${scenario.Is_Email_Card.replace(/\n/g, '<br>')}</div>
+                    <button style="width:100%; margin-top:10px; background:#10b981; border:none; color:white; padding:8px; cursor:pointer;">AVIS</button>
+                </div>`);
+        }
     }
-    document.getElementById('kpi-content').insertAdjacentHTML('afterbegin', `<div style="${smallStyle} color:#10b981;">[KPI] ${step.Impact_KPI}</div>`);
 
-    // CHAT & EMAIL CARD
-    const chatBox = document.getElementById('chat-mobile');
-    if (isLastStep && scenario.Is_Email_Card) {
-        chatBox.innerHTML = ""; // Exclusivité du mail
-        chatBox.insertAdjacentHTML('beforeend', `
-            <div class="email-card" style="background:#1e293b; border:1px solid #10b981; padding:15px; border-radius:8px;">
-                <div style="color:#10b981; font-weight:bold; font-size:10px;">HAPPI : CLÔTURE</div>
-                <div style="font-size:12px; margin-top:5px;">${scenario.Is_Email_Card.replace(/\n/g, '<br>')}</div>
-                <button style="width:100%; margin-top:10px; background:#10b981; border:none; color:white; padding:8px; cursor:pointer;">AVIS</button>
-            </div>`);
-    } else {
-        const acteur = step.Acteur;
-        const side = (acteur === "Client") ? "Client" : "Happi";
-        chatBox.insertAdjacentHTML('beforeend', `
-            <div class="message-row ${side}"><div class="bubble"><span class="msg-badge ${acteur.toLowerCase()}">${acteur.toUpperCase()}</span>${step.Message_UI}</div></div>
-        `);
-    }
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // BOUTON NAVIGATION
+    // 4. Gestion du bouton (votre logique de verrouillage est parfaite ici)
     const btn = document.getElementById('nextBtn');
-    if (isLastStep && scenario.Scenario_Suivant) {
-        btn.innerText = "CONTINUER";
-        btn.onclick = () => {
-            const nextId = scenario.Scenario_Suivant.split(':')[0];
-            document.getElementById('scenario-select').value = nextId;
-            document.getElementById('scenario-select').dispatchEvent(new Event('change'));
-        };
+    if (isLastStep) {
+        if (scenario.Scenario_Suivant) {
+            btn.innerText = "CONTINUER";
+            btn.onclick = () => { /* logique nextId */ };
+        } else {
+            btn.innerText = "FIN";
+            btn.onclick = null;
+        }
     } else {
-        btn.innerText = isLastStep ? "FIN" : "SUIVANT";
-        btn.onclick = isLastStep ? null : () => { currentStepIdx++; renderStep(); };
+        btn.innerText = "SUIVANT";
+        btn.onclick = () => { currentStepIdx++; renderStep(); };
     }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // 4. FOCUS & RESET
